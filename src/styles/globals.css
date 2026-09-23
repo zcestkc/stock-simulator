@@ -51,7 +51,6 @@
     --sidebar-active-foreground: 0 0% 100%;
 
     --chart-grid: 220 14% 96%;
-    --chart-1: 244 55% 68%;
 
     color-scheme: light;
   }
@@ -98,7 +97,6 @@
     --sidebar-active-foreground: 0 0% 100%;
 
     --chart-grid: 217 15% 16%;
-    --chart-1: 244 70% 72%;
 
     color-scheme: dark; /* native inputs, scrollbars */
   }

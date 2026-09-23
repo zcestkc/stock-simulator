@@ -18,7 +18,7 @@ Tailwind CSS 3, TanStack Query 5. Early stage.
     | Foreground | `foreground`, `<surface>-foreground` (e.g. `card-foreground`, `primary-foreground`), `muted-foreground`, `link`, `sidebar-foreground`, `sidebar-muted`, `sidebar-active-foreground` | `text-*` |
     | Line | `border`, `input`, `ring` | `border-*`, `divide-*`, `ring-*` |
     | Status | `positive`, `negative`, `destructive`, `info`, `warning` | all of the above (text, borders, tinted bg like `bg-positive/10`) |
-    | JS-only | `chart-grid`, `chart-1` | none; use `tokenColor()` |
+    | JS-only | `chart-grid` | none; use `tokenColor()` |
 
     Text on a surface uses that surface's `-foreground` pair: `bg-primary text-primary-foreground`.
   - A class that "does nothing" usually means the wrong role: check it's in the table.
@@ -38,8 +38,7 @@ Tailwind CSS 3, TanStack Query 5. Early stage.
     `resolvedTheme` changes.
 - **The browser only talks to this Next.js app.** Client code calls same-origin `/api/*`
   through `lib/api-client.ts`; never call StockSimulatorApi or third-party APIs from the browser, and
-  never put the API URL or keys in `NEXT_PUBLIC_*` vars. (The old Alpha Vantage crypto code
-  breaks this and is due to be moved behind StockSimulatorApi.)
+  never put the API URL or keys in `NEXT_PUBLIC_*` vars.
 - **Every page is public.** Login is only required for actions on the user's money (investing,
   portfolio), and that's enforced by the API (`[Authorize]`), not by page routing. Logged-out
   UI shows a "Log in" prompt that returns the user to where they were (`?redirectTo=`); never
@@ -105,8 +104,7 @@ needs no CORS and its URL is server-only (`API_URL` in `.env`).
   `HydrationBoundary`; client components read the same data with `useQuery` hooks. Query
   options live next to the fetcher so the server and client share keys and stale times.
 - **Charts**: `lightweight-charts` (TradingView, Apache 2.0) for price charts. Keep
-  `attributionLogo: true` — it's the licence's attribution requirement. Recharts is still used
-  by the legacy crypto page.
+  `attributionLogo: true` — it's the licence's attribution requirement.
 
 ## Folder structure
 
@@ -123,7 +121,7 @@ src/
 │       ├── home/             #     /home
 │       ├── stocks/           #     /stocks list, /stocks/[symbol] detail + chart + Invest
 │       │                     #     ([symbol]/_components/stock.tsx composes stocks + portfolio)
-│       ├── cryptos/          #     /cryptos (legacy, Alpha Vantage)
+│       ├── cryptos/          #     /cryptos — "Coming soon" placeholder (crypto not built yet)
 │       └── profile/          #     /profile
 ├── features/<name>/          # one folder per domain feature
 │   ├── api/                  #   fetchers + queryOptions + useX hooks (one file per endpoint)

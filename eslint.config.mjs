@@ -14,7 +14,7 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 // Each feature may only import from itself (CLAUDE.md: features don't import each other).
-const FEATURES = ['auth', 'cryptos', 'portfolio', 'stocks'];
+const FEATURES = ['auth', 'portfolio', 'stocks'];
 
 export default tseslint.config(
   {
