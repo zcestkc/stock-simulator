@@ -127,6 +127,11 @@ needs no CORS and its URL is server-only (`API_URL` in `.env`).
 - **Investing** (`features/portfolio`): the Invest button on a stock page sends logged-out users
   to `/auth/login?redirectTo=/stocks/X?invest=1`; on return the dialog opens automatically.
   Buys are by dollar amount (fractional shares); the API prices the order from its own quote.
+- **The logged-in user is loaded once on the server**, in `app/(main)/layout.tsx` (prefetched into
+  a `HydrationBoundary` around the app shell), so the header and pages render the same
+  logged-in/out state on server and client. Don't prefetch the user again in pages: React Query
+  won't apply server data to a query that already exists in the cache during render, which is
+  exactly what caused an Invest-button hydration mismatch. This makes `(main)` pages dynamic.
 - **Data fetching**: server components prefetch with a `QueryClient` and pass state down via
   `HydrationBoundary`; client components read the same data with `useQuery` hooks. Query
   options live next to the fetcher so the server and client share keys and stale times.
