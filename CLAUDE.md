@@ -32,6 +32,10 @@ Tailwind CSS 3, TanStack Query 5. Early stage.
   through `lib/api-client.ts`; never call StalkApi or third-party APIs from the browser, and
   never put the API URL or keys in `NEXT_PUBLIC_*` vars. (The old Alpha Vantage crypto code
   breaks this and is due to be moved behind StalkApi.)
+- **Every page is public.** Login is only required for actions on the user's money (investing,
+  portfolio), and that's enforced by the API (`[Authorize]`), not by page routing. Logged-out
+  UI shows a "Log in" prompt that returns the user to where they were (`?redirectTo=`); never
+  redirect a page to login. `useUser().data === null` means logged out.
 - **Token refresh lives in one function**, `refreshTokens()` in `lib/server/api-upstream.ts`,
   used by both the `/api` proxy and middleware. Don't add refresh logic anywhere else.
 - New Tailwind class locations must be covered by `content` in `tailwind.config.ts`, or the
@@ -49,7 +53,7 @@ Tailwind CSS 3, TanStack Query 5. Early stage.
                 ┌──────────── Next.js (stalk-fe, :3000) ────────────┐
 Browser ──────► │ pages (SSR)          ───┐                         │
   same-origin   │ /api/* proxy route   ───┼──► StalkApi (.NET 9, :5030/api) ──► Postgres (Docker, :5432)
-  only          │ middleware (auth)    ───┘          │              │
+  only          │ middleware (refresh) ───┘          │              │
                 └───────────────────────────────────┼──────────────┘
                                                      └──► Yahoo Finance (market data, cached)
 ```
@@ -68,10 +72,15 @@ needs no CORS and its URL is server-only (`API_URL` in `.env`).
   tokens once and retries (not for `auth/login|register|logout|refresh-token`). If StalkApi
   is unreachable it returns 502.
 - **Auth**: JWT in httpOnly cookies (`accessToken` 5 min, `refreshToken` 30 days) set by the
-  API and passed through the proxy. `src/middleware.ts` guards page routes (everything except
-  `/`, `/auth/*`, `/api/*`): no refresh token → redirect to login; no access token → refresh, then
-  write the new cookies onto the *request* as well as the response, so server components
-  rendering that same request see them; refresh fails → clear cookies and redirect to login.
+  API and passed through the proxy. Pages never require login. `src/middleware.ts` only keeps a
+  session fresh: if there's a refresh token but no access token, it refreshes and writes the new
+  cookies onto the *request* as well as the response (so server components rendering that same
+  request see them); if refresh fails it clears the cookie and the visitor continues logged out.
+  `lib/auth.ts` `getUser()` returns `null` on 401, and `api-client` never toasts 401s: being
+  logged out is a normal state. Callers handle it with `isUnauthorized(error)`.
+- **Investing** (`features/portfolio`): the Invest button on a stock page sends logged-out users
+  to `/auth/login?redirectTo=/app/stocks/X?invest=1`; on return the dialog opens automatically.
+  Buys are by dollar amount (fractional shares); the API prices the order from its own quote.
 - **Data fetching**: server components prefetch with a `QueryClient` and pass state down via
   `HydrationBoundary`; client components read the same data with `useQuery` hooks. Query
   options live next to the fetcher so the server and client share keys and stale times.
@@ -88,8 +97,9 @@ src/
 ├── app/                      # Next.js routes only — thin pages that compose features
 │   ├── page.tsx              #   landing page (public)
 │   ├── auth/                 #   login/register (public)
-│   └── app/                  #   authenticated app, wrapped in _components/home-layout (side nav)
-│       ├── stocks/           #     /app/stocks list, /app/stocks/[symbol] detail + chart
+│   └── app/                  #   the app (all pages public), wrapped in _components/home-layout (side nav)
+│       ├── stocks/           #     /app/stocks list, /app/stocks/[symbol] detail + chart + Invest
+│       │                     #     ([symbol]/_components/stock.tsx composes stocks + portfolio)
 │       ├── cryptos/          #     /app/cryptos (legacy, Alpha Vantage)
 │       └── profile/
 ├── features/<name>/          # one folder per domain feature
@@ -106,7 +116,7 @@ src/
 ├── types/api.ts              # API response types (mirror the API's DTOs)
 ├── utils/                    # small helpers: cn, css-tokens, eod
 ├── styles/globals.css        # Tailwind layers + design tokens
-└── middleware.ts             # auth guard / token refresh
+└── middleware.ts             # silent token refresh (never blocks a page)
 ```
 
 ### Adding a feature (pattern to copy: `features/stocks`)

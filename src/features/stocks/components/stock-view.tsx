@@ -2,11 +2,12 @@
 
 import { Spinner } from '@/components/ui/spinner/spinner';
 import { paths } from '@/config/paths';
-import { STOCK_RANGES, StockRange } from '@/types/api';
+import { STOCK_RANGES, StockQuote, StockRange } from '@/types/api';
 import { cn } from '@/utils/cn';
+import { formatCurrency, formatSigned } from '@/utils/format';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { useStock } from '../api/get-stock';
 import { useStockHistory } from '../api/get-stock-history';
 import { ChartType, StockChart } from './stock-chart';
@@ -20,12 +21,6 @@ const RANGE_LABELS: Record<StockRange, string> = {
   '5y': '5Y',
 };
 
-const formatPrice = (value: number, currency: string) =>
-  new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(value);
-
-const formatSigned = (value: number, suffix = '') =>
-  `${value > 0 ? '+' : ''}${value.toFixed(2)}${suffix}`;
-
 const directionClass = (value: number) =>
   value > 0
     ? 'text-positive'
@@ -33,7 +28,13 @@ const directionClass = (value: number) =>
       ? 'text-negative'
       : 'text-muted-foreground';
 
-export const StockView = ({ symbol }: { symbol: string }) => {
+type StockViewProps = {
+  symbol: string;
+  // Slot for actions next to the price (e.g. Invest), given the live quote.
+  actions?: (stock: StockQuote) => ReactNode;
+};
+
+export const StockView = ({ symbol, actions }: StockViewProps) => {
   const [range, setRange] = useState<StockRange>('1d');
   const [chartType, setChartType] = useState<ChartType>('line');
 
@@ -62,24 +63,30 @@ export const StockView = ({ symbol }: { symbol: string }) => {
       </Link>
 
       {stock && (
-        <div>
-          <p className="text-muted-foreground">
-            {stock.name} · {stock.exchange}
-          </p>
-          <p className="text-3xl font-semibold tabular-nums">
-            {formatPrice(stock.price, stock.currency)}
-          </p>
-          {rangeChange && (
-            <p
-              className={cn('tabular-nums', directionClass(rangeChange.change))}
-            >
-              {formatSigned(rangeChange.change)} (
-              {formatSigned(rangeChange.percent, '%')}){' '}
-              <span className="text-muted-foreground">
-                {range === '1d' ? 'today' : `past ${RANGE_LABELS[range]}`}
-              </span>
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <p className="text-muted-foreground">
+              {stock.name} · {stock.exchange}
             </p>
-          )}
+            <p className="text-3xl font-semibold tabular-nums">
+              {formatCurrency(stock.price, stock.currency)}
+            </p>
+            {rangeChange && (
+              <p
+                className={cn(
+                  'tabular-nums',
+                  directionClass(rangeChange.change),
+                )}
+              >
+                {formatSigned(rangeChange.change)} (
+                {formatSigned(rangeChange.percent, '%')}){' '}
+                <span className="text-muted-foreground">
+                  {range === '1d' ? 'today' : `past ${RANGE_LABELS[range]}`}
+                </span>
+              </p>
+            )}
+          </div>
+          {actions?.(stock)}
         </div>
       )}
 

@@ -79,7 +79,12 @@ export const CryptoView = ({ cryptoId }: { cryptoId: string }) => {
             <XAxis dataKey="date" />
             <Tooltip />
             <Legend />
-            <Line dataKey="open" stroke={tokenColor('chart-1')} name="Open" dot={false} />
+            <Line
+              dataKey="open"
+              stroke={tokenColor('chart-1')}
+              name="Open"
+              dot={false}
+            />
             {/* <Line dataKey="high" stroke="#82ca9d" name="High" />
             <Line dataKey="low" stroke="#ffc658" name="Low" />
             <Line dataKey="close" stroke="#ffc658" name="Close" />

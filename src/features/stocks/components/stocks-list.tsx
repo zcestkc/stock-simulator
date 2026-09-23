@@ -3,13 +3,11 @@
 import { Spinner } from '@/components/ui/spinner/spinner';
 import { paths } from '@/config/paths';
 import { cn } from '@/utils/cn';
+import { formatCurrency, formatSigned } from '@/utils/format';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { useStocks } from '../api/get-stocks';
-
-const formatPrice = (value: number, currency: string) =>
-  new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(value);
 
 const formatVolume = (value: number | null) =>
   value == null
@@ -18,9 +16,6 @@ const formatVolume = (value: number | null) =>
         notation: 'compact',
         maximumFractionDigits: 1,
       }).format(value);
-
-const formatSigned = (value: number, suffix = '') =>
-  `${value > 0 ? '+' : ''}${value.toFixed(2)}${suffix}`;
 
 const stockHref = (symbol: string) =>
   `${paths.app.stocks.getHref()}/${encodeURIComponent(symbol)}`;
@@ -119,7 +114,7 @@ export const StocksList = () => {
                     {stock.name}
                   </td>
                   <td className="px-4 py-3 text-right tabular-nums">
-                    {formatPrice(stock.price, stock.currency)}
+                    {formatCurrency(stock.price, stock.currency)}
                   </td>
                   <td
                     className={cn(

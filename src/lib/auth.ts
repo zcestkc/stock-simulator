@@ -6,12 +6,16 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { z } from 'zod';
-import { api } from './api-client';
+import { api, isUnauthorized } from './api-client';
 
-export const getUser = async (): Promise<User> => {
-  const response = (await api.get('/auth/me')) as User;
-
-  return response;
+// null = not logged in. Pages are public, so that's a normal state, not an error.
+export const getUser = async (): Promise<User | null> => {
+  try {
+    return await api.get<User>('/auth/me');
+  } catch (error) {
+    if (isUnauthorized(error)) return null;
+    throw error;
+  }
 };
 
 const userQueryKey = ['user'];
@@ -52,7 +56,8 @@ export const useLogout = ({ onSuccess }: { onSuccess?: () => void }) => {
   return useMutation({
     mutationFn: logout,
     onSuccess: () => {
-      queryClient.removeQueries({ queryKey: userQueryKey });
+      queryClient.setQueryData(userQueryKey, null);
+      queryClient.removeQueries({ queryKey: ['portfolio'] });
       onSuccess?.();
     },
   });

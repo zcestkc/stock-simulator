@@ -1,7 +1,10 @@
 'use client';
 
-import { useNotifications } from '@/components/ui/notifications';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner/spinner';
+import { paths } from '@/config/paths';
 import { useUser } from '@/lib/auth';
+import Link from 'next/link';
 
 type EntryProps = {
   label: string;
@@ -18,8 +21,19 @@ const Entry = ({ label, value }: EntryProps) => (
 
 export const Profile = () => {
   const user = useUser();
-  const { addNotification } = useNotifications();
-  if (!user) return null;
+
+  if (user.isLoading) return <Spinner />;
+
+  if (!user.data) {
+    return (
+      <div className="space-y-4 rounded-lg bg-card p-6 shadow">
+        <p className="text-muted-foreground">Log in to see your profile.</p>
+        <Link href={paths.auth.login.getHref(paths.app.profile.getHref())}>
+          <Button>Log in</Button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="overflow-hidden bg-card shadow sm:rounded-lg">
@@ -36,8 +50,8 @@ export const Profile = () => {
       </div>
       <div className="border-t border-border px-4 py-5 sm:p-0">
         <dl className="sm:divide-y sm:divide-border">
-          <Entry label="Username" value={user.data?.username ?? ''} />
-          <Entry label="Role" value={user.data?.role ?? ''} />
+          <Entry label="Username" value={user.data.username} />
+          <Entry label="Role" value={user.data.role} />
         </dl>
       </div>
     </div>

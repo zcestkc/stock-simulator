@@ -52,6 +52,32 @@ export type StockHistory = {
   candles: StockCandle[];
 };
 
+export type Holding = {
+  symbol: string;
+  quantity: number;
+  averageCost: number; // per share, USD
+};
+
+export type Portfolio = {
+  cash: number;
+  holdings: Holding[];
+};
+
+export type Trade = {
+  id: string;
+  symbol: string;
+  side: 'Buy' | 'Sell';
+  quantity: number;
+  price: number;
+  amount: number;
+  executedAt: string;
+};
+
+export type TradeResult = {
+  trade: Trade;
+  portfolio: Portfolio;
+};
+
 export type Crypto = {
   ['Meta Data']: MetaData;
   ['Time Series (Digital Currency Daily)']: DailyTimeSeries;

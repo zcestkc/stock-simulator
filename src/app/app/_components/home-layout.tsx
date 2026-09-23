@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown/dropdown';
 import { paths } from '@/config/paths';
-import { useLogout } from '@/lib/auth';
+import { useLogout, useUser } from '@/lib/auth';
 import { cn } from '@/utils/cn';
 import {
   Bitcoin,
@@ -40,6 +40,7 @@ type SideNavigationItem = {
 const Layout = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
   const router = useRouter();
+  const user = useUser();
   const logout = useLogout({
     // onSuccess: () => router.push(paths.auth.login.getHref(pathname)),
     onSuccess: () => router.push(paths.home.getHref()),
@@ -67,7 +68,8 @@ const Layout = ({ children }: { children: ReactNode }) => {
                 href={item.to}
                 className={cn(
                   'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-active-foreground group flex flex-1 w-full items-center rounded-md p-2 text-base font-medium',
-                  isActive && 'bg-sidebar-active text-sidebar-active-foreground',
+                  isActive &&
+                    'bg-sidebar-active text-sidebar-active-foreground',
                 )}
               >
                 <item.icon
@@ -106,7 +108,8 @@ const Layout = ({ children }: { children: ReactNode }) => {
                       className={cn(
                         'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-active-foreground',
                         'group flex flex-1 w-full items-center rounded-md p-2 text-base font-medium',
-                        isActive && 'bg-sidebar-active text-sidebar-active-foreground',
+                        isActive &&
+                          'bg-sidebar-active text-sidebar-active-foreground',
                       )}
                     >
                       <item.icon
@@ -123,33 +126,45 @@ const Layout = ({ children }: { children: ReactNode }) => {
               </nav>
             </DrawerContent>
           </Drawer>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="overflow-hidden rounded-full"
-              >
-                <span className="sr-only">Open user menu</span>
-                <User2 className="size-6 rounded-full" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem
-                onClick={() => router.push(paths.app.profile.getHref())}
-                className={cn('block px-4 py-2 text-sm text-popover-foreground')}
-              >
-                Your Profile
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                className={cn('block px-4 py-2 text-sm text-popover-foreground w-full')}
-                onClick={() => logout.mutate()}
-              >
-                Sign Out
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {user.data ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="overflow-hidden rounded-full"
+                >
+                  <span className="sr-only">Open user menu</span>
+                  <User2 className="size-6 rounded-full" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  onClick={() => router.push(paths.app.profile.getHref())}
+                  className={cn(
+                    'block px-4 py-2 text-sm text-popover-foreground',
+                  )}
+                >
+                  Your Profile
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className={cn(
+                    'block px-4 py-2 text-sm text-popover-foreground w-full',
+                  )}
+                  onClick={() => logout.mutate()}
+                >
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            !user.isLoading && (
+              <Link href={paths.auth.login.getHref(pathname)}>
+                <Button variant="outline">Log in</Button>
+              </Link>
+            )
+          )}
         </header>
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
           {children}

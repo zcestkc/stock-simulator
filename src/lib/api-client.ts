@@ -11,6 +11,30 @@ type RequestOptions = {
   external?: boolean;
 };
 
+export class ApiError extends Error {
+  constructor(
+    public status: number,
+    message: string,
+  ) {
+    super(message);
+    this.name = 'ApiError';
+  }
+}
+
+// Error bodies are plain text ("Not enough cash…") or JSON ({ message } / problem details).
+function errorMessage(body: string, fallback: string): string {
+  if (!body) return fallback;
+  try {
+    const json = JSON.parse(body);
+    return json.message ?? json.title ?? fallback;
+  } catch {
+    return body;
+  }
+}
+
+export const isUnauthorized = (error: unknown) =>
+  error instanceof ApiError && error.status === 401;
+
 function buildUrlWithParams(
   url: string,
   params?: RequestOptions['params'],
@@ -97,17 +121,16 @@ async function fetchApi<T>(
   });
 
   if (!response.ok) {
-    console.log('failed for', url, response.status);
-    const message = response.statusText;
-    // const message = (await response.json()).message || response.statusText; // TODO fix this
-    if (typeof window !== 'undefined') {
+    const message = errorMessage(await response.text(), response.statusText);
+    // 401 just means "not logged in" — callers decide what to do (e.g. prompt login).
+    if (typeof window !== 'undefined' && response.status !== 401) {
       useNotifications.getState().addNotification({
         type: 'error',
         title: 'Error',
         message,
       });
     }
-    throw new Error(message);
+    throw new ApiError(response.status, message);
   }
 
   // Some endpoints (e.g. logout) may return an empty body
