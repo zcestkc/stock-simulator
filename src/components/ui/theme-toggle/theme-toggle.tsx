@@ -10,7 +10,7 @@ import {
 import { cn } from '@/utils/cn';
 import { Check, Monitor, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 
 const OPTIONS = [
   { value: 'light', label: 'Light', icon: Sun },
@@ -18,13 +18,18 @@ const OPTIONS = [
   { value: 'system', label: 'System', icon: Monitor },
 ] as const;
 
+const subscribeNoop = () => () => {};
+
 export const ThemeToggle = () => {
   const { theme, resolvedTheme, setTheme } = useTheme();
 
-  // The theme is only known on the client; render a neutral icon until mounted
-  // so server and client HTML match.
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  // The theme is only known on the client; render a neutral icon until hydrated
+  // so server and client HTML match. (false on the server, true in the browser)
+  const mounted = useSyncExternalStore(
+    subscribeNoop,
+    () => true,
+    () => false,
+  );
 
   const Icon = mounted && resolvedTheme === 'dark' ? Moon : Sun;
 

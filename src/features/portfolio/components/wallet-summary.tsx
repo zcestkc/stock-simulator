@@ -76,7 +76,7 @@ export const WalletSummary = () => {
               ({formatSigned(data.gainPercent, '%')})
             </span>
           </p>
-          <p className="text-sm text-muted-foreground tabular-nums">
+          <p className="text-sm tabular-nums text-muted-foreground">
             {formatCurrency(data.cash)} cash ·{' '}
             {formatCurrency(data.investedValue)} invested
           </p>
@@ -159,7 +159,6 @@ const AddMoneyForm = ({ onDone }: { onDone: () => void }) => {
           min={1}
           max={MAX_DEPOSIT}
           step="0.01"
-          autoFocus
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="1000.00"

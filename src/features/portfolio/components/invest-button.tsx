@@ -38,16 +38,19 @@ export const InvestButton = ({
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [autoOpened, setAutoOpened] = useState(false);
 
   const portfolio = usePortfolio({ queryConfig: { enabled: isLoggedIn } });
   const holding = portfolio.data?.holdings.find((h) => h.symbol === symbol);
 
-  // Coming back from login to finish investing: open the dialog, then drop the query param.
+  // Coming back from login to finish investing: open the dialog once...
+  if (autoOpen && isLoggedIn && !autoOpened) {
+    setAutoOpened(true);
+    setOpen(true);
+  }
+  // ...and drop ?invest=1 from the URL so a refresh doesn't reopen it.
   useEffect(() => {
-    if (autoOpen && isLoggedIn) {
-      setOpen(true);
-      router.replace(pathname, { scroll: false });
-    }
+    if (autoOpen && isLoggedIn) router.replace(pathname, { scroll: false });
   }, [autoOpen, isLoggedIn, pathname, router]);
 
   if (user.isLoading) return <Button disabled>Invest</Button>;
@@ -152,7 +155,6 @@ const InvestForm = ({ symbol, price, cash, onDone }: InvestFormProps) => {
           inputMode="decimal"
           min={1}
           step="0.01"
-          autoFocus
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="100.00"

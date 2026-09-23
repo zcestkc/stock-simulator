@@ -5,9 +5,7 @@ import { Info, CircleAlert, CircleX, CircleCheck } from 'lucide-react';
 const icons = {
   info: <Info className="size-6 text-info" aria-hidden="true" />,
   success: <CircleCheck className="size-6 text-positive" aria-hidden="true" />,
-  warning: (
-    <CircleAlert className="size-6 text-warning" aria-hidden="true" />
-  ),
+  warning: <CircleAlert className="size-6 text-warning" aria-hidden="true" />,
   error: <CircleX className="size-6 text-destructive" aria-hidden="true" />,
 };
 
@@ -32,7 +30,9 @@ export const Notification = ({
           <div className="flex items-start">
             <div className="shrink-0">{icons[type]}</div>
             <div className="ml-3 w-0 flex-1 pt-0.5">
-              <p className="text-sm font-medium text-popover-foreground">{title}</p>
+              <p className="text-sm font-medium text-popover-foreground">
+                {title}
+              </p>
               <p className="mt-1 text-sm text-muted-foreground">{message}</p>
             </div>
             <div className="ml-4 flex shrink-0">

@@ -68,13 +68,13 @@ const Layout = ({ children }: { children: ReactNode }) => {
                 key={item.name}
                 href={item.to}
                 className={cn(
-                  'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-active-foreground group flex flex-1 w-full items-center rounded-md p-2 text-base font-medium',
+                  'group flex w-full flex-1 items-center rounded-md p-2 text-base font-medium text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-active-foreground',
                   isActive &&
                     'bg-sidebar-active text-sidebar-active-foreground',
                 )}
               >
                 <item.icon
-                  className="text-sidebar-muted group-hover:text-sidebar-foreground mr-4 size-6 shrink-0"
+                  className="mr-4 size-6 shrink-0 text-sidebar-muted group-hover:text-sidebar-foreground"
                   aria-hidden="true"
                 />
                 {item.name}
@@ -108,7 +108,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
                       href={item.to}
                       className={cn(
                         'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-active-foreground',
-                        'group flex flex-1 w-full items-center rounded-md p-2 text-base font-medium',
+                        'group flex w-full flex-1 items-center rounded-md p-2 text-base font-medium',
                         isActive &&
                           'bg-sidebar-active text-sidebar-active-foreground',
                       )}
@@ -153,7 +153,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     className={cn(
-                      'block px-4 py-2 text-sm text-popover-foreground w-full',
+                      'block w-full px-4 py-2 text-sm text-popover-foreground',
                     )}
                     onClick={() => logout.mutate()}
                   >

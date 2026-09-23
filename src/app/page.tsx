@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Typewriter } from '@/components/ui/header/Typewriter';
+import { Typewriter } from '@/components/ui/header/typewriter';
 import { Link } from '@/components/ui/link/link';
 import { paths } from '@/config/paths';
 import { GitHubLogoIcon, RocketIcon } from '@radix-ui/react-icons';
@@ -9,7 +9,7 @@ const HomePage = () => {
   return (
     <div className="flex h-screen items-center bg-card">
       <div className="mx-auto max-w-7xl px-4 py-12 text-center sm:px-6 lg:px-8 lg:py-16">
-        <h2 className="text-3xl tracking-widest text-foreground sm:text-4xl select-none">
+        <h2 className="select-none text-3xl tracking-widest text-foreground sm:text-4xl">
           STOCK SIMULATOR
         </h2>
         <Typewriter text="An investment simulator" delay={100} infinite />

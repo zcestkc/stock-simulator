@@ -39,7 +39,11 @@ export const AuthLayout = ({ children }: LayoutProps) => {
             className="flex items-center text-primary-foreground"
             href={paths.home.getHref()}
           >
-            <img className="h-24 w-auto dark:invert" src="/logo.svg" alt="Workflow" />
+            <img
+              className="h-24 w-auto dark:invert"
+              src="/logo.svg"
+              alt="Workflow"
+            />
           </Link>
         </div>
 

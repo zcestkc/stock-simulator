@@ -53,7 +53,9 @@ Tailwind CSS 3, TanStack Query 5. Early stage.
 - **React Compiler is on** (`experimental.reactCompiler` in `next.config.ts`,
   `babel-plugin-react-compiler`). It memoises components, hooks and derived values at build time,
   so don't add `useMemo`, `useCallback` or `React.memo` by hand. Write plain code; it only works
-  if components follow the Rules of React (pure render, no mutating props/state). To opt a
+  if components follow the [Rules of React](https://react.dev/reference/rules) (pure render, no
+  mutating props/state; `yarn lint` checks them). Don't set state directly in an effect body
+  (`react-hooks/set-state-in-effect`): derive it during render instead. To opt a
   component out while debugging, put `'use no memo';` at the top of its body.
 - **React 19: no `forwardRef`.** `ref` is a regular prop. Type props with
   `React.ComponentProps<'button'>` / `React.ComponentProps<typeof Primitive.Root>` (these include
@@ -157,5 +159,10 @@ yarn test         # vitest
 npx tsc --noEmit  # type-check
 ```
 
-`yarn lint` is currently broken (ESLint 9 with a legacy `.eslintrc.cjs`); run
-`ESLINT_USE_FLAT_CONFIG=false npx eslint <paths>` instead. Formatting: Prettier (`.prettierrc`).
+`yarn lint` / `yarn lint-fix` run ESLint 9 with the flat config in `eslint.config.mjs` (keep it at
+0 problems). It includes Prettier (`.prettierrc`, `endOfLine: auto` because git checks files out
+with CRLF on Windows), the Rules of Hooks + React Compiler rules (`eslint-plugin-react-hooks` v7),
+Next.js, a11y, Tailwind class checks, kebab-case file/folder names, and import boundaries
+(features can't import each other; shared code can't import features/app). Import sorting is left
+to the editor (`source.sortImports`), so `import/order` is off. The `typescript-eslint` packages are
+pinned to 8.20 because newer ones need Node ≥ 22.13.

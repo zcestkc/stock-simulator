@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface TypewriterProps {
   text: string;
@@ -8,37 +8,27 @@ interface TypewriterProps {
   infinite: boolean;
 }
 
+const PAUSE_AT_END_MS = 2000;
+
 export const Typewriter = ({ text, delay, infinite }: TypewriterProps) => {
-  const [currentText, setCurrentText] = useState('');
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+  // Only the position is state; the visible text is derived from it.
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
-
-    if (isPaused) return;
-
-    if (currentIndex < text.length) {
-      timeout = setTimeout(() => {
-        setCurrentText((prevText) => prevText + text[currentIndex]);
-        setCurrentIndex((prevIndex) => prevIndex + 1);
-      }, delay);
-    } else if (infinite) {
-      // Pause at the end before looping
-      setIsPaused(true);
-      timeout = setTimeout(() => {
-        setCurrentText('');
-        setCurrentIndex(0);
-        setIsPaused(false);
-      }, 2000);
+    if (index < text.length) {
+      const timeout = setTimeout(() => setIndex((i) => i + 1), delay);
+      return () => clearTimeout(timeout);
     }
-
-    return () => clearTimeout(timeout);
-  }, [currentIndex, delay, infinite, text]);
+    if (infinite) {
+      // Pause at the end, then start typing again.
+      const timeout = setTimeout(() => setIndex(0), PAUSE_AT_END_MS);
+      return () => clearTimeout(timeout);
+    }
+  }, [index, delay, infinite, text]);
 
   return (
     <p className="select-none">
-      &nbsp;{currentText}
+      &nbsp;{text.slice(0, index)}
       <span className="animate-ping">|</span>
     </p>
   );

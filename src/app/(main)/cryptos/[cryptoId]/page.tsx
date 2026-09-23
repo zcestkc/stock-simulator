@@ -5,7 +5,7 @@ import {
   QueryClient,
 } from '@tanstack/react-query';
 
-import { Crypto } from './_components/Crypto';
+import { Crypto } from './_components/crypto';
 
 export const metadata = {
   title: 'Crypto',
