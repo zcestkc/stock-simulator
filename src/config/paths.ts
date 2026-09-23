@@ -5,11 +5,11 @@ export const paths = {
 
   auth: {
     register: {
-      getHref: (redirectTo?: string | null | undefined) =>
+      getHref: (redirectTo?: string | null) =>
         `/auth/register${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''}`,
     },
     login: {
-      getHref: (redirectTo?: string | null | undefined) =>
+      getHref: (redirectTo?: string | null) =>
         `/auth/login${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''}`,
     },
   },

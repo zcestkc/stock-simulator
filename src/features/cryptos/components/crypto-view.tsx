@@ -35,7 +35,7 @@ export const CryptoView = ({ cryptoId }: { cryptoId: string }) => {
 
   const crypto = cryptoQuery.data;
   console.log(crypto);
-  const data: Crypto = crypto?.Information ? JSON.parse(testData) : crypto;
+  const data = (crypto?.Information ? JSON.parse(testData) : crypto) as Crypto;
 
   // // TODO: handle more gracefully
   // if (crypto?.Information || !crypto) {

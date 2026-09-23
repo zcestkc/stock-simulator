@@ -183,7 +183,7 @@ const Form = <
     <FormProvider {...form}>
       <form
         className={cn('space-y-6', className)}
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
         id={id}
       >
         {children(form)}

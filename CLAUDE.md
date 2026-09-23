@@ -160,8 +160,11 @@ npx tsc --noEmit  # type-check
 ```
 
 `yarn lint` / `yarn lint-fix` run ESLint 9 with the flat config in `eslint.config.mjs` (keep it at
-0 problems). It includes Prettier (`.prettierrc`, `endOfLine: auto` because git checks files out
-with CRLF on Windows), the Rules of Hooks + React Compiler rules (`eslint-plugin-react-hooks` v7),
+0 problems). It includes typescript-eslint's **type-checked** rules (`recommendedTypeChecked`, via
+`projectService`: no floating/misused promises, no unsafe `any`; prefer `unknown` + a cast/check),
+React recommended + JSX runtime, Prettier (`.prettierrc`, `endOfLine: auto` because git checks files
+out with CRLF on Windows), the Rules of Hooks + React Compiler rules (`eslint-plugin-react-hooks` v7
+`recommended-latest`, `exhaustive-deps` as an error),
 Next.js, a11y, Tailwind class checks, kebab-case file/folder names, and import boundaries
 (features can't import each other; shared code can't import features/app). Import sorting is left
 to the editor (`source.sortImports`), so `import/order` is off. The `typescript-eslint` packages are

@@ -29,11 +29,20 @@ export default tseslint.config(
   },
 
   js.configs.recommended,
-  ...tseslint.configs.recommended,
+  // Type-aware rules: they use the TypeScript compiler (e.g. floating promises, unsafe `any`).
+  ...tseslint.configs.recommendedTypeChecked,
+  {
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
   react.configs.flat.recommended,
   react.configs.flat['jsx-runtime'],
   // Rules of Hooks + React Compiler rules (purity, immutability, refs, …)
-  reactHooks.configs.flat.recommended,
+  reactHooks.configs.flat['recommended-latest'],
   jsxA11y.flatConfigs.recommended,
   importPlugin.flatConfigs.recommended,
   importPlugin.flatConfigs.typescript,
@@ -58,6 +67,7 @@ export default tseslint.config(
     },
     rules: {
       '@next/next/no-img-element': 'off',
+      'react-hooks/exhaustive-deps': 'error',
       'react/prop-types': 'off',
       'jsx-a11y/anchor-is-valid': 'off',
       'import/default': 'off',

@@ -3,7 +3,7 @@ import { useNotifications } from '@/components/ui/notifications';
 type RequestOptions = {
   method?: string;
   headers?: Record<string, string>;
-  body?: any;
+  body?: unknown;
   cookie?: string;
   params?: Record<string, string | number | boolean | undefined | null>;
   cache?: RequestCache;
@@ -25,7 +25,7 @@ export class ApiError extends Error {
 function errorMessage(body: string, fallback: string): string {
   if (!body) return fallback;
   try {
-    const json = JSON.parse(body);
+    const json = JSON.parse(body) as { message?: string; title?: string };
     return json.message ?? json.title ?? fallback;
   } catch {
     return body;
@@ -142,13 +142,13 @@ export const api = {
   get<T>(url: string, options?: RequestOptions): Promise<T> {
     return fetchApi<T>(url, { ...options, method: 'GET' });
   },
-  post<T>(url: string, body?: any, options?: RequestOptions): Promise<T> {
+  post<T>(url: string, body?: unknown, options?: RequestOptions): Promise<T> {
     return fetchApi<T>(url, { ...options, method: 'POST', body });
   },
-  put<T>(url: string, body?: any, options?: RequestOptions): Promise<T> {
+  put<T>(url: string, body?: unknown, options?: RequestOptions): Promise<T> {
     return fetchApi<T>(url, { ...options, method: 'PUT', body });
   },
-  patch<T>(url: string, body?: any, options?: RequestOptions): Promise<T> {
+  patch<T>(url: string, body?: unknown, options?: RequestOptions): Promise<T> {
     return fetchApi<T>(url, { ...options, method: 'PATCH', body });
   },
   delete<T>(url: string, options?: RequestOptions): Promise<T> {
