@@ -1,7 +1,5 @@
-import { splitCookiesString } from 'set-cookie-parser';
-
-// Server-only helpers for talking to StockSimulatorApi. Used by middleware (edge) and the
-// /api proxy route (node), so this must only use web-standard APIs.
+// Server-only helpers for talking to StockSimulatorApi. Used by proxy.ts and the /api
+// proxy route, both of which run on Node.js in Next 16.
 
 /** Base URL of StockSimulatorApi, e.g. http://localhost:5030/api. Never exposed to the browser. */
 export const getApiUrl = (): string => {
@@ -10,11 +8,9 @@ export const getApiUrl = (): string => {
   return url;
 };
 
-/** All Set-Cookie headers on a response, as separate strings. */
+/** All Set-Cookie headers on a response, as separate strings (Headers.getSetCookie, Node 18.14+). */
 export const getSetCookies = (response: Response): string[] =>
-  typeof response.headers.getSetCookie === 'function'
-    ? response.headers.getSetCookie()
-    : splitCookiesString(response.headers.get('set-cookie') ?? '');
+  response.headers.getSetCookie();
 
 /**
  * Exchanges a refresh token for a new access + refresh token pair.

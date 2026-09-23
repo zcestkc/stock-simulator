@@ -31,16 +31,16 @@ const StockPage = async ({
   const autoOpenInvest = (await searchParams).invest === '1';
 
   const queryClient = new QueryClient();
-  await Promise.all([
-    queryClient.prefetchQuery(getStockQueryOptions(symbol)),
-    queryClient.prefetchQuery(getStockHistoryQueryOptions(symbol, '1d')),
+  const [quote] = await Promise.all([
+    queryClient.query(getStockQueryOptions(symbol)).catch(() => null),
+    queryClient
+      .query(getStockHistoryQueryOptions(symbol, '1d'))
+      .catch(() => null), // chart can retry on the client
   ]);
 
   // loading.tsx has already started streaming, so this is a "soft 404" (200 + noindex),
   // which is Next's documented behaviour.
-  if (!queryClient.getQueryData(getStockQueryOptions(symbol).queryKey)) {
-    notFound();
-  }
+  if (!quote) notFound();
 
   return (
     <ContentLayout title={symbol}>

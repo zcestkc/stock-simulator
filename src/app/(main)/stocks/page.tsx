@@ -14,7 +14,7 @@ export const metadata = {
 
 const StocksPage = async () => {
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(getStocksQueryOptions());
+  await queryClient.query(getStocksQueryOptions()).catch(() => null);
 
   return (
     <ContentLayout title="Stocks">
