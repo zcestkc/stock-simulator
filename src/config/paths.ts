@@ -16,22 +16,22 @@ export const paths = {
 
   app: {
     root: {
-      getHref: () => '/app',
+      getHref: () => '/home',
     },
     home: {
-      getHref: () => '/app',
+      getHref: () => '/home',
     },
     stocks: {
-      getHref: () => '/app/stocks',
+      getHref: () => '/stocks',
     },
     cryptos: {
-      getHref: () => '/app/cryptos',
+      getHref: () => '/cryptos',
     },
     users: {
-      getHref: () => '/app/users',
+      getHref: () => '/users',
     },
     profile: {
-      getHref: () => '/app/profile',
+      getHref: () => '/profile',
     },
   },
   public: {},

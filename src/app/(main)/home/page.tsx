@@ -1,4 +1,4 @@
-import { Home } from './_components/home';
+import { Home } from '../_components/home';
 
 export const metadata = {
   title: 'Home',

@@ -38,6 +38,8 @@ Tailwind CSS 3, TanStack Query 5. Early stage.
   redirect a page to login. `useUser().data === null` means logged out.
 - **Token refresh lives in one function**, `refreshTokens()` in `lib/server/api-upstream.ts`,
   used by both the `/api` proxy and middleware. Don't add refresh logic anywhere else.
+- **URLs come from `config/paths.ts`** (`paths.app.stocks.getHref()`), never hard-coded strings.
+  Sidebar pages live in the `app/(main)/` route group.
 - New Tailwind class locations must be covered by `content` in `tailwind.config.ts`, or the
   classes silently won't be generated.
 - **React 19: no `forwardRef`.** `ref` is a regular prop. Type props with
@@ -79,7 +81,7 @@ needs no CORS and its URL is server-only (`API_URL` in `.env`).
   `lib/auth.ts` `getUser()` returns `null` on 401, and `api-client` never toasts 401s: being
   logged out is a normal state. Callers handle it with `isUnauthorized(error)`.
 - **Investing** (`features/portfolio`): the Invest button on a stock page sends logged-out users
-  to `/auth/login?redirectTo=/app/stocks/X?invest=1`; on return the dialog opens automatically.
+  to `/auth/login?redirectTo=/stocks/X?invest=1`; on return the dialog opens automatically.
   Buys are by dollar amount (fractional shares); the API prices the order from its own quote.
 - **Data fetching**: server components prefetch with a `QueryClient` and pass state down via
   `HydrationBoundary`; client components read the same data with `useQuery` hooks. Query
@@ -95,13 +97,16 @@ Loosely follows [bulletproof-react](https://github.com/alan2207/bulletproof-reac
 ```
 src/
 ├── app/                      # Next.js routes only — thin pages that compose features
-│   ├── page.tsx              #   landing page (public)
-│   ├── auth/                 #   login/register (public)
-│   └── app/                  #   the app (all pages public), wrapped in _components/home-layout (side nav)
-│       ├── stocks/           #     /app/stocks list, /app/stocks/[symbol] detail + chart + Invest
+│   ├── page.tsx              #   / landing page (no sidebar)
+│   ├── auth/                 #   /auth/login, /auth/register (auth layout)
+│   ├── api/[...path]/        #   /api/* BFF proxy route to StalkApi
+│   └── (main)/               #   route group: shares the sidebar layout, adds nothing to the URL
+│       ├── layout.tsx        #     wraps pages in _components/home-layout (side nav + header)
+│       ├── home/             #     /home
+│       ├── stocks/           #     /stocks list, /stocks/[symbol] detail + chart + Invest
 │       │                     #     ([symbol]/_components/stock.tsx composes stocks + portfolio)
-│       ├── cryptos/          #     /app/cryptos (legacy, Alpha Vantage)
-│       └── profile/
+│       ├── cryptos/          #     /cryptos (legacy, Alpha Vantage)
+│       └── profile/          #     /profile
 ├── features/<name>/          # one folder per domain feature
 │   ├── api/                  #   fetchers + queryOptions + useX hooks (one file per endpoint)
 │   └── components/           #   feature UI
@@ -109,7 +114,6 @@ src/
 │   ├── ui/                   #   primitives (button, drawer, dropdown, form, spinner, …)
 │   ├── layouts/              #   ContentLayout (page title + container)
 │   └── errors/
-├── app/api/[...path]/        # (under app/) the BFF proxy route to StalkApi
 ├── lib/                      # app infrastructure: api-client, auth hooks, react-query config
 │   └── server/               #   server-only: api-upstream (API_URL, refreshTokens, cookie helpers)
 ├── config/                   # env (zod-validated), paths (all route hrefs — use these, don't hard-code URLs)
@@ -125,7 +129,7 @@ src/
 2. `features/<name>/api/get-<thing>.ts`: fetcher via `api.get('/path')`, a
    `get<Thing>QueryOptions()` and a `use<Thing>()` hook.
 3. Components in `features/<name>/components/` (`'use client'` if they use hooks).
-4. Route in `app/app/<name>/page.tsx`: prefetch + `HydrationBoundary`, wrap in `ContentLayout`.
+4. Route in `app/(main)/<name>/page.tsx`: prefetch + `HydrationBoundary`, wrap in `ContentLayout`.
 5. Add the href to `config/paths.ts` and, if it's top-level, the nav item in `home-layout.tsx`.
 
 ## Commands
