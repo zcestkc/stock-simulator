@@ -50,6 +50,11 @@ Tailwind CSS 3, TanStack Query 5. Early stage.
   Sidebar pages live in the `app/(main)/` route group.
 - New Tailwind class locations must be covered by `content` in `tailwind.config.ts`, or the
   classes silently won't be generated.
+- **React Compiler is on** (`experimental.reactCompiler` in `next.config.ts`,
+  `babel-plugin-react-compiler`). It memoises components, hooks and derived values at build time,
+  so don't add `useMemo`, `useCallback` or `React.memo` by hand. Write plain code; it only works
+  if components follow the Rules of React (pure render, no mutating props/state). To opt a
+  component out while debugging, put `'use no memo';` at the top of its body.
 - **React 19: no `forwardRef`.** `ref` is a regular prop. Type props with
   `React.ComponentProps<'button'>` / `React.ComponentProps<typeof Primitive.Root>` (these include
   `ref`) and spread them onto the element. Don't set `displayName` on named components, and avoid

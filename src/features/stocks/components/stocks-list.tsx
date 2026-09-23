@@ -6,7 +6,7 @@ import { cn } from '@/utils/cn';
 import { formatCurrency, formatSigned } from '@/utils/format';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useStocks } from '../api/get-stocks';
 
 const formatVolume = (value: number | null) =>
@@ -25,16 +25,16 @@ export const StocksList = () => {
   const stocksQuery = useStocks();
   const [search, setSearch] = useState('');
 
-  const stocks = useMemo(() => {
-    const term = search.trim().toLowerCase();
-    const all = stocksQuery.data ?? [];
-    if (!term) return all;
-    return all.filter(
-      (s) =>
-        s.symbol.toLowerCase().includes(term) ||
-        s.name.toLowerCase().includes(term),
-    );
-  }, [stocksQuery.data, search]);
+  // No useMemo needed: the React Compiler memoises this automatically.
+  const term = search.trim().toLowerCase();
+  const all = stocksQuery.data ?? [];
+  const stocks = term
+    ? all.filter(
+        (s) =>
+          s.symbol.toLowerCase().includes(term) ||
+          s.name.toLowerCase().includes(term),
+      )
+    : all;
 
   if (stocksQuery.isLoading) {
     return (
