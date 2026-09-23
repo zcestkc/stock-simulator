@@ -29,6 +29,29 @@ export type StockQuote = {
   updatedAt: string;
 };
 
+export const STOCK_RANGES = ['1d', '5d', '1mo', '6mo', '1y', '5y'] as const;
+export type StockRange = (typeof STOCK_RANGES)[number];
+
+export type StockCandle = {
+  time: number; // unix seconds, UTC
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+};
+
+export type StockHistory = {
+  symbol: string;
+  name: string;
+  currency: string;
+  exchange: string;
+  range: StockRange;
+  interval: string;
+  gmtOffset: number; // exchange UTC offset, seconds
+  candles: StockCandle[];
+};
+
 export type Crypto = {
   ['Meta Data']: MetaData;
   ['Time Series (Digital Currency Daily)']: DailyTimeSeries;

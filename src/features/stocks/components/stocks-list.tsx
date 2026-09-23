@@ -1,7 +1,10 @@
 'use client';
 
 import { Spinner } from '@/components/ui/spinner/spinner';
+import { paths } from '@/config/paths';
 import { cn } from '@/utils/cn';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { useStocks } from '../api/get-stocks';
 
@@ -19,7 +22,11 @@ const formatVolume = (value: number | null) =>
 const formatSigned = (value: number, suffix = '') =>
   `${value > 0 ? '+' : ''}${value.toFixed(2)}${suffix}`;
 
+const stockHref = (symbol: string) =>
+  `${paths.app.stocks.getHref()}/${encodeURIComponent(symbol)}`;
+
 export const StocksList = () => {
+  const router = useRouter();
   const stocksQuery = useStocks();
   const [search, setSearch] = useState('');
 
@@ -95,8 +102,19 @@ export const StocksList = () => {
                     ? 'text-red-600'
                     : 'text-gray-500';
               return (
-                <tr key={stock.symbol} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 font-semibold">{stock.symbol}</td>
+                <tr
+                  key={stock.symbol}
+                  onClick={() => router.push(stockHref(stock.symbol))}
+                  className="cursor-pointer hover:bg-gray-50"
+                >
+                  <td className="px-4 py-3 font-semibold">
+                    <Link
+                      href={stockHref(stock.symbol)}
+                      className="hover:underline"
+                    >
+                      {stock.symbol}
+                    </Link>
+                  </td>
                   <td className="max-w-64 truncate px-4 py-3 text-gray-600">
                     {stock.name}
                   </td>
