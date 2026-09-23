@@ -14,6 +14,21 @@ export type User = Entity<{
 
 export type AuthResponse = User;
 
+export type StockQuote = {
+  symbol: string;
+  name: string;
+  currency: string;
+  exchange: string;
+  price: number;
+  previousClose: number;
+  change: number;
+  changePercent: number;
+  dayHigh: number | null;
+  dayLow: number | null;
+  volume: number | null;
+  updatedAt: string;
+};
+
 export type Crypto = {
   ['Meta Data']: MetaData;
   ['Time Series (Digital Currency Daily)']: DailyTimeSeries;

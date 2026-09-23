@@ -18,7 +18,14 @@ import {
 import { paths } from '@/config/paths';
 import { useLogout } from '@/lib/auth';
 import { cn } from '@/utils/cn';
-import { Bitcoin, Home, PanelLeft, User2, Users } from 'lucide-react';
+import {
+  Bitcoin,
+  Home,
+  PanelLeft,
+  TrendingUp,
+  User2,
+  Users,
+} from 'lucide-react';
 import { default as Link } from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { JSX, ReactNode } from 'react';
@@ -39,6 +46,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
   });
   const navigation = [
     { name: 'Home', to: paths.app.root.getHref(), icon: Home },
+    { name: 'Stocks', to: paths.app.stocks.getHref(), icon: TrendingUp },
     {
       name: 'Cryptos',
       to: paths.app.cryptos.getHref(),
