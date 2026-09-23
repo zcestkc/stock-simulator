@@ -12,7 +12,7 @@ const HomePage = () => {
         <h2 className="text-3xl tracking-widest text-foreground select-none sm:text-4xl">
           STOCK SIMULATOR
         </h2>
-        <Typewriter text="An investment simulator" delay={100} infinite />
+        <Typewriter text="What is your risk appetite?" delay={100} infinite />
         <Link href={paths.main.home.getHref()}>
           <Image
             src="/logo.svg"
