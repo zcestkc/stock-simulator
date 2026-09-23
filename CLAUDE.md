@@ -122,7 +122,7 @@ src/
 │   ├── api/[...path]/        #   /api/* BFF proxy route to StockSimulatorApi
 │   └── (main)/               #   route group: shares the sidebar layout, adds nothing to the URL
 │       ├── layout.tsx        #     wraps pages in _components/home-layout (side nav + header)
-│       ├── home/             #     /home
+│       ├── home/             #     /home (renders portfolio WalletSummary)
 │       ├── stocks/           #     /stocks list, /stocks/[symbol] detail + chart + Invest
 │       │                     #     ([symbol]/_components/stock.tsx composes stocks + portfolio)
 │       ├── cryptos/          #     /cryptos — "Coming soon" placeholder (crypto not built yet)

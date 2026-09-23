@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { ThemeToggle } from '@/components/ui/theme-toggle/theme-toggle';
 import {
   Drawer,
   DrawerContent,
@@ -16,6 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown/dropdown';
+import { ThemeToggle } from '@/components/ui/theme-toggle/theme-toggle';
 import { paths } from '@/config/paths';
 import { useLogout, useUser } from '@/lib/auth';
 import { cn } from '@/utils/cn';
@@ -43,7 +43,6 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const user = useUser();
   const logout = useLogout({
-    // onSuccess: () => router.push(paths.auth.login.getHref(pathname)),
     onSuccess: () => router.push(paths.home.getHref()),
   });
   const navigation = [
