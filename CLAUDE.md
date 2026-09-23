@@ -49,7 +49,8 @@ Tailwind CSS 3, TanStack Query 5. Early stage.
   happens in one place: `useRedirectIfLoggedIn()` on the login/register pages.
 - **Token refresh lives in one function**, `refreshTokens()` in `lib/server/api-upstream.ts`,
   used by both the `/api` proxy and middleware. Don't add refresh logic anywhere else.
-- **URLs come from `config/paths.ts`** (`paths.app.stocks.getHref()`), never hard-coded strings.
+- **URLs come from `lib/paths.ts`** (`paths.main.stocks.getHref()`), never hard-coded strings.
+  `paths.landing` is `/`; `paths.main.*` are the sidebar pages; `paths.auth.*` take a `redirectTo`.
   Sidebar pages live in the `app/(main)/` route group.
 - New Tailwind class locations must be covered by `content` in `tailwind.config.ts`, or the
   classes silently won't be generated.
@@ -151,8 +152,8 @@ src/
 │   └── errors/
 ├── lib/                      # app infrastructure: api-client, react-query config
 │   ├── auth/                 #   useUser/useLogin/useRegister/useLogout (index.ts) + model/user.ts
+│   ├── paths.ts              #   every route href (use these, don't hard-code URLs)
 │   └── server/               #   server-only: api-upstream (API_URL, refreshTokens, cookie helpers)
-├── config/                   # paths (all route hrefs — use these, don't hard-code URLs)
 ├── types/css.d.ts            # ambient declarations only (API types live in features/*/model)
 ├── utils/                    # small helpers: cn, css-tokens, format
 ├── styles/globals.css        # Tailwind layers + design tokens
@@ -166,7 +167,7 @@ src/
    `get<Thing>QueryOptions()` and a `use<Thing>()` hook.
 3. Components in `features/<name>/components/` (`'use client'` if they use hooks).
 4. Route in `app/(main)/<name>/page.tsx`: prefetch + `HydrationBoundary`, wrap in `ContentLayout`.
-5. Add the href to `config/paths.ts` and, if it's top-level, the nav item in `home-layout.tsx`.
+5. Add the href to `lib/paths.ts` (under `paths.main`) and, if it's top-level, the nav item in `home-layout.tsx`.
 
 ## Commands
 
