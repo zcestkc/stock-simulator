@@ -70,6 +70,10 @@ older Next knowledge (e.g. `middleware` is now `proxy`, `reactCompiler` is top-l
   validation errors never render. Vitest also compiles with the React Compiler
   (`vitest.config.ts`, via `@rolldown/plugin-babel` + `reactCompilerPreset`) so tests catch this;
   `login-form.test.tsx` has a regression test.
+- **Type imports use `import type { … }`** on their own line, never plain `import { … }` or inline
+  `import { Foo, type Bar }`. Enforced by `verbatimModuleSyntax` in `tsconfig.json` (TS1484) and
+  by `@typescript-eslint/consistent-type-imports` + `import/consistent-type-specifier-style`
+  (`yarn lint-fix` converts them). For a module's types in tests use `import type * as X`.
 - **React 19: no `forwardRef`.** `ref` is a regular prop. Type props with
   `React.ComponentProps<'button'>` / `React.ComponentProps<typeof Primitive.Root>` (these include
   `ref`) and spread them onto the element. Don't set `displayName` on named components, and avoid

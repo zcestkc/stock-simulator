@@ -1,4 +1,5 @@
 import { useLogin } from '@/lib/auth';
+import type * as AuthModule from '@/lib/auth';
 import '@testing-library/jest-dom/vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -6,8 +7,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { LoginForm } from '../login-form';
 
 vi.mock('@/lib/auth', async () => {
-  const actual =
-    await vi.importActual<typeof import('@/lib/auth')>('@/lib/auth');
+  const actual = await vi.importActual<typeof AuthModule>('@/lib/auth');
   return {
     ...actual,
     useLogin: vi.fn(),
