@@ -27,7 +27,7 @@ export const Notification = ({
 }: NotificationProps) => {
   return (
     <div className="flex w-full flex-col items-center space-y-4 sm:items-end">
-      <div className="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-popover shadow-lg ring-1 ring-foreground/5">
+      <div className="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-popover shadow-lg ring-1 ring-border">
         <div className="p-4" role="alert" aria-label={title}>
           <div className="flex items-start">
             <div className="shrink-0">{icons[type]}</div>

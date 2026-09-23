@@ -8,13 +8,25 @@ Tailwind CSS 3, TanStack Query 5. Early stage.
 - **Colours come from CSS tokens only.** Never hard-code a colour in a component: no hex/rgb
   values, and no Tailwind palette classes like `text-gray-500`, `bg-white`, `text-green-600`.
   - Tokens are defined once in `src/styles/globals.css` (`:root`, HSL channels) and mapped
-    to Tailwind colours in `tailwind.config.ts`.
-  - In markup use the token classes: `bg-card`, `text-muted-foreground`, `text-positive`,
-    `border-border`, `bg-primary/90`, …
+    to Tailwind in `tailwind.config.ts`.
+  - **Tokens are scoped by role.** Each one only exists for the utilities that fit it, so a
+    wrong pairing (`text-card`, `bg-muted-foreground`) generates no CSS:
+
+    | Role | Tokens | Utilities |
+    |---|---|---|
+    | Surface | `background`, `card`, `popover`, `primary`, `secondary`, `muted`, `accent`, `overlay`, `sidebar`, `sidebar-accent`, `sidebar-active` | `bg-*`, `ring-offset-*` |
+    | Foreground | `foreground`, `<surface>-foreground` (e.g. `card-foreground`, `primary-foreground`), `muted-foreground`, `link`, `sidebar-foreground`, `sidebar-muted`, `sidebar-active-foreground` | `text-*` |
+    | Line | `border`, `input`, `ring` | `border-*`, `divide-*`, `ring-*` |
+    | Status | `positive`, `negative`, `destructive`, `info`, `warning` | all of the above (text, borders, tinted bg like `bg-positive/10`) |
+    | JS-only | `chart-grid`, `chart-1` | none; use `tokenColor()` |
+
+    Text on a surface uses that surface's `-foreground` pair: `bg-primary text-primary-foreground`.
+  - A class that "does nothing" usually means the wrong role: check it's in the table.
   - In JS (canvas charts, SVG props) use `tokenColor('positive')` or
-    `tokenColor('positive', 0.2)` from `src/utils/css-tokens.ts`.
+    `tokenColor('positive', 0.2)` from `src/utils/css-tokens.ts`. Any token works here.
   - Need a new colour? Add a semantic token (named for its role, e.g. `--chart-grid`, not
-    `--light-grey`) in `globals.css` **and** `tailwind.config.ts`, then use it.
+    `--light-grey`) in `globals.css`, then register it under the right role in
+    `tailwind.config.ts` (skip that for JS-only tokens).
   - Price direction is always `positive` (up) / `negative` (down); errors are `destructive`.
 - **Market data comes from our API, never from third parties in the browser.** No API keys in
   `NEXT_PUBLIC_*` vars. (The old Alpha Vantage crypto code breaks this and is due to be moved.)
