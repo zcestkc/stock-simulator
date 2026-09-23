@@ -60,6 +60,10 @@ Tailwind CSS 3, TanStack Query 5. Early stage.
   `React.ComponentProps<'button'>` / `React.ComponentProps<typeof Primitive.Root>` (these include
   `ref`) and spread them onto the element. Don't set `displayName` on named components, and avoid
   `ComponentPropsWithoutRef` / `ElementRef`.
+- **`app/` is thin.** Route files and their `_components/` only compose features, or hold
+  route-level layout (the app shell, auth layout). Real UI with its own data/loading/empty states
+  belongs in `features/<name>/components/` (e.g. the profile lives in `features/auth`). Lint can't
+  catch this one (the import direction is legal), so check it in review.
 - Features don't import from other features. Shared code goes in `components/`, `lib/`,
   `utils/`, `types/`.
 
@@ -122,7 +126,7 @@ src/
 │       ├── stocks/           #     /stocks list, /stocks/[symbol] detail + chart + Invest
 │       │                     #     ([symbol]/_components/stock.tsx composes stocks + portfolio)
 │       ├── cryptos/          #     /cryptos — "Coming soon" placeholder (crypto not built yet)
-│       └── profile/          #     /profile
+│       └── profile/          #     /profile (renders features/auth UserProfile)
 ├── features/<name>/          # one folder per domain feature
 │   ├── api/                  #   fetchers + queryOptions + useX hooks (one file per endpoint)
 │   └── components/           #   feature UI

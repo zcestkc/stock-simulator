@@ -1,4 +1,5 @@
-import { Profile } from './_components/profile';
+import { ContentLayout } from '@/components/layouts/content-layout';
+import { UserProfile } from '@/features/auth/components/user-profile';
 
 export const metadata = {
   title: 'Profile',
@@ -6,7 +7,11 @@ export const metadata = {
 };
 
 const ProfilePage = () => {
-  return <Profile />;
+  return (
+    <ContentLayout title="Profile">
+      <UserProfile />
+    </ContentLayout>
+  );
 };
 
 export default ProfilePage;

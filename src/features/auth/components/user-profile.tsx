@@ -19,7 +19,7 @@ const Entry = ({ label, value }: EntryProps) => (
   </div>
 );
 
-export const Profile = () => {
+export const UserProfile = () => {
   const user = useUser();
 
   if (user.isLoading) return <Spinner />;
