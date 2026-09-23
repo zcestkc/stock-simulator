@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner/spinner';
+import { LoadingRegion, Skeleton } from '@/components/ui/skeleton/skeleton';
 import { paths } from '@/lib/paths';
 import { useUser } from '@/lib/auth';
 import Link from 'next/link';
@@ -22,7 +22,18 @@ const Entry = ({ label, value }: EntryProps) => (
 export const UserProfile = () => {
   const user = useUser();
 
-  if (user.isLoading) return <Spinner />;
+  if (user.isLoading) {
+    return (
+      <LoadingRegion
+        label="Loading your profile…"
+        className="space-y-4 rounded-lg bg-card p-6 shadow-sm"
+      >
+        <Skeleton className="h-5 w-40" />
+        <Skeleton className="h-4 w-64" />
+        <Skeleton className="h-4 w-32" />
+      </LoadingRegion>
+    );
+  }
 
   if (!user.data) {
     return (

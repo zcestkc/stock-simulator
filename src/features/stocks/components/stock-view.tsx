@@ -1,6 +1,5 @@
 'use client';
 
-import { Spinner } from '@/components/ui/spinner/spinner';
 import { paths } from '@/lib/paths';
 import { STOCK_RANGES, StockRange } from '../model/stock-history';
 import { StockQuoteResponse } from '../model/stock-quote';
@@ -12,6 +11,7 @@ import { ReactNode, useState } from 'react';
 import { useStock } from '../api/get-stock';
 import { useStockHistory } from '../api/get-stock-history';
 import { ChartType, StockChart } from './stock-chart';
+import { StockChartSkeleton } from './stock-view-skeleton';
 
 const RANGE_LABELS: Record<StockRange, string> = {
   '1d': '1D',
@@ -130,9 +130,7 @@ export const StockView = ({ symbol, actions }: StockViewProps) => {
         )}
       >
         {historyQuery.isLoading ? (
-          <div className="flex h-75 items-center justify-center sm:h-105">
-            <Spinner size="lg" />
-          </div>
+          <StockChartSkeleton />
         ) : historyQuery.isError || !history ? (
           <div className="flex h-75 items-center justify-center text-destructive sm:h-105">
             Couldn&apos;t load chart data.

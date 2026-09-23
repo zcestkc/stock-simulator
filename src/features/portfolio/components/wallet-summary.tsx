@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog/dialog';
 import { useNotifications } from '@/components/ui/notifications';
-import { Spinner } from '@/components/ui/spinner/spinner';
+import { LoadingRegion, Skeleton } from '@/components/ui/skeleton/skeleton';
 import { paths } from '@/lib/paths';
 import { useUser } from '@/lib/auth';
 import { cn } from '@/utils/cn';
@@ -32,9 +32,18 @@ export const WalletSummary = () => {
 
   if (user.isLoading || (isLoggedIn && portfolio.isLoading)) {
     return (
-      <div className="flex h-40 items-center justify-center">
-        <Spinner size="lg" />
-      </div>
+      <LoadingRegion
+        label="Loading your wallet…"
+        className="space-y-4 rounded-lg border bg-card p-6"
+      >
+        <Skeleton className="h-4 w-24" />
+        <Skeleton className="h-9 w-56" />
+        <Skeleton className="h-4 w-48" />
+        <div className="grid grid-cols-2 gap-4 border-t pt-4">
+          <Skeleton className="h-8 w-28" />
+          <Skeleton className="h-8 w-28" />
+        </div>
+      </LoadingRegion>
     );
   }
 

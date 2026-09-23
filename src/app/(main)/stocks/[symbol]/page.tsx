@@ -6,25 +6,28 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
+import { notFound } from 'next/navigation';
 import { Stock } from './_components/stock';
 
-export const generateMetadata = async ({
-  params,
-}: {
-  params: Promise<{ symbol: string }>;
-}) => {
-  const symbol = decodeURIComponent((await params).symbol).toUpperCase();
+type Params = Promise<{ symbol: string }>;
+
+const parseSymbol = async (params: Params) =>
+  decodeURIComponent((await params).symbol).toUpperCase();
+
+export const generateMetadata = async ({ params }: { params: Params }) => {
+  const symbol = await parseSymbol(params);
   return { title: symbol, description: `${symbol} stock price and chart` };
 };
 
+// While this awaits, loading.tsx (next to this file) is shown automatically.
 const StockPage = async ({
   params,
   searchParams,
 }: {
-  params: Promise<{ symbol: string }>;
+  params: Params;
   searchParams: Promise<{ invest?: string }>;
 }) => {
-  const symbol = decodeURIComponent((await params).symbol).toUpperCase();
+  const symbol = await parseSymbol(params);
   const autoOpenInvest = (await searchParams).invest === '1';
 
   const queryClient = new QueryClient();
@@ -33,8 +36,10 @@ const StockPage = async ({
     queryClient.prefetchQuery(getStockHistoryQueryOptions(symbol, '1d')),
   ]);
 
+  // loading.tsx has already started streaming, so this is a "soft 404" (200 + noindex),
+  // which is Next's documented behaviour.
   if (!queryClient.getQueryData(getStockQueryOptions(symbol).queryKey)) {
-    return <ContentLayout title={symbol}>Stock not found</ContentLayout>;
+    notFound();
   }
 
   return (

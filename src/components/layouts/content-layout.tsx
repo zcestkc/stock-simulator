@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 type ContentLayoutProps = {
   children: ReactNode;
-  title?: string;
+  title?: ReactNode; // text, or a <Skeleton /> while loading
 };
 
 export const ContentLayout = ({ children, title = '' }: ContentLayoutProps) => {

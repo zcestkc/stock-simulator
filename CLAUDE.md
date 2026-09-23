@@ -126,6 +126,18 @@ needs no CORS and its URL is server-only (`API_URL` in `.env`).
 - **Data fetching**: server components prefetch with a `QueryClient` and pass state down via
   `HydrationBoundary`; client components read the same data with `useQuery` hooks. Query
   options live next to the fetcher so the server and client share keys and stale times.
+- **Loading states (every page must have one)**:
+  - Pages that fetch on the server just `await` their data; a `loading.tsx` next to the page
+    is the loading UI. Next wraps the page in `<Suspense>` with it automatically (no import) and
+    prefetches it, so navigation shows it instantly (see `app/(main)/stocks/`).
+  - Only add an in-page `<Suspense>` when a page has several independent slow sections that
+    should appear separately; otherwise `loading.tsx` alone is the pattern.
+  - Skeletons are feature components shaped like the real UI (`StocksListSkeleton`,
+    `StockViewSkeleton`), built from `components/ui/skeleton` (`Skeleton`, `LoadingRegion` for
+    one screen-reader "Loading…"). Client-side `isLoading` states use skeletons too, not spinners
+    (the spinner is only for in-button pending states).
+  - `notFound()` after data loads is a soft 404 (200 + `noindex`) because `loading.tsx` has
+    already started streaming; that's Next's documented behaviour.
 - **Charts**: `lightweight-charts` (TradingView, Apache 2.0) for price charts. Keep
   `attributionLogo: true` — it's the licence's attribution requirement.
 

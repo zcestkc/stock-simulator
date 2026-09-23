@@ -1,6 +1,5 @@
 'use client';
 
-import { Spinner } from '@/components/ui/spinner/spinner';
 import { paths } from '@/lib/paths';
 import { cn } from '@/utils/cn';
 import { formatCurrency, formatMarketTime, formatSigned } from '@/utils/format';
@@ -8,6 +7,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useStocks } from '../api/get-stocks';
+import { StocksListSkeleton } from './stocks-list-skeleton';
 
 const formatVolume = (value: number | null) =>
   value == null
@@ -36,13 +36,7 @@ export const StocksList = () => {
       )
     : all;
 
-  if (stocksQuery.isLoading) {
-    return (
-      <div className="flex h-48 w-full items-center justify-center">
-        <Spinner size="lg" />
-      </div>
-    );
-  }
+  if (stocksQuery.isLoading) return <StocksListSkeleton />;
 
   if (stocksQuery.isError) {
     return (
