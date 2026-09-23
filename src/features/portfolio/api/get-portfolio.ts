@@ -1,6 +1,6 @@
 import { api } from '@/lib/api-client';
-import { QueryConfig } from '@/lib/react-query';
-import { PortfolioResponse } from '../model/portfolio';
+import type { QueryConfig } from '@/lib/react-query';
+import type { PortfolioResponse } from '../model/portfolio';
 import { queryOptions, useQuery } from '@tanstack/react-query';
 
 export const getPortfolio = (): Promise<PortfolioResponse> => {

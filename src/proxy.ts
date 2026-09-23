@@ -1,5 +1,6 @@
 import { cookiePairs, refreshTokens } from '@/lib/server/api-upstream';
-import { NextResponse, type NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 // All pages are public; login is only required for actions on the user's money
 // (enforced by StockSimulatorApi, e.g. [Authorize] on PortfolioController).

@@ -1,8 +1,9 @@
 import * as DrawerPrimitive from '@radix-ui/react-dialog';
-import React from 'react';
+import type React from 'react';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { cn } from '@/utils/cn';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
+import type { VariantProps } from 'class-variance-authority';
 
 const Drawer = DrawerPrimitive.Root;
 

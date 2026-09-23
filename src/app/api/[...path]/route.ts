@@ -4,7 +4,7 @@ import {
   getSetCookies,
   refreshTokens,
 } from '@/lib/server/api-upstream';
-import { NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 /*
  * Backend-for-frontend proxy: the browser only ever calls same-origin /api/*,

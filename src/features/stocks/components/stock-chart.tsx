@@ -1,15 +1,15 @@
 'use client';
 
-import { StockCandleResponse } from '../model/stock-history';
+import type { StockCandleResponse } from '../model/stock-history';
 import { useTheme } from 'next-themes';
 import { tokenColor } from '@/utils/css-tokens';
+import type { UTCTimestamp } from 'lightweight-charts';
 import {
   AreaSeries,
   CandlestickSeries,
   ColorType,
   createChart,
   HistogramSeries,
-  UTCTimestamp,
 } from 'lightweight-charts';
 import { useEffect, useRef } from 'react';
 

@@ -1,6 +1,6 @@
 import { paths } from '@/lib/paths';
 import Link from 'next/link';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 export const AuthLayout = ({ children }: { children: ReactNode }) => {
   return (

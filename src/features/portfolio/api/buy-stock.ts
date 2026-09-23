@@ -1,6 +1,6 @@
 import { api } from '@/lib/api-client';
-import { MutationConfig } from '@/lib/react-query';
-import { TradeResultResponse } from '../model/trade';
+import type { MutationConfig } from '@/lib/react-query';
+import type { TradeResultResponse } from '../model/trade';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { getPortfolioQueryOptions } from './get-portfolio';
 

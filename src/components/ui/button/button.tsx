@@ -1,6 +1,7 @@
 import { cn } from '@/utils/cn';
-import { cva, VariantProps } from 'class-variance-authority';
-import React from 'react';
+import type { VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
+import type React from 'react';
 import { Spinner } from '../spinner/spinner';
 
 const buttonVariants = cva(

@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import HomeLayout from './_components/home-layout';
 
 const AppLayout = ({ children }: { children: ReactNode }) => {

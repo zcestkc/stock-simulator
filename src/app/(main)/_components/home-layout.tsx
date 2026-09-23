@@ -29,8 +29,9 @@ import {
 } from 'lucide-react';
 import { default as Link } from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { JSX, ReactNode } from 'react';
-import { ErrorBoundary, type FallbackProps } from 'react-error-boundary';
+import type { JSX, ReactNode } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+import type { FallbackProps } from 'react-error-boundary';
 
 type SideNavigationItem = {
   name: string;

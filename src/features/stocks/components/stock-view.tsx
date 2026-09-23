@@ -1,16 +1,19 @@
 'use client';
 
 import { paths } from '@/lib/paths';
-import { STOCK_RANGES, StockRange } from '../model/stock-history';
-import { StockQuoteResponse } from '../model/stock-quote';
+import type { StockRange } from '../model/stock-history';
+import { STOCK_RANGES } from '../model/stock-history';
+import type { StockQuoteResponse } from '../model/stock-quote';
 import { cn } from '@/utils/cn';
 import { formatCurrency, formatSigned } from '@/utils/format';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
-import { ReactNode, useState } from 'react';
+import type { ReactNode } from 'react';
+import { useState } from 'react';
 import { useStock } from '../api/get-stock';
 import { useStockHistory } from '../api/get-stock-history';
-import { ChartType, StockChart } from './stock-chart';
+import type { ChartType } from './stock-chart';
+import { StockChart } from './stock-chart';
 import { StockChartSkeleton } from './stock-view-skeleton';
 
 const RANGE_LABELS: Record<StockRange, string> = {

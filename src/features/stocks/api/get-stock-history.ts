@@ -1,6 +1,6 @@
 import { api } from '@/lib/api-client';
-import { QueryConfig } from '@/lib/react-query';
-import { StockHistoryResponse, StockRange } from '../model/stock-history';
+import type { QueryConfig } from '@/lib/react-query';
+import type { StockHistoryResponse, StockRange } from '../model/stock-history';
 import {
   keepPreviousData,
   queryOptions,

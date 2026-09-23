@@ -1,6 +1,6 @@
 import { api } from '@/lib/api-client';
-import { QueryConfig } from '@/lib/react-query';
-import { StockQuoteResponse } from '../model/stock-quote';
+import type { QueryConfig } from '@/lib/react-query';
+import type { StockQuoteResponse } from '../model/stock-quote';
 import { queryOptions, useQuery } from '@tanstack/react-query';
 
 export const getStock = (symbol: string): Promise<StockQuoteResponse> => {

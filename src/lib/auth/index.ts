@@ -1,5 +1,5 @@
 import { api, isUnauthorized } from '../api-client';
-import { UserResponse } from './model/user';
+import type { UserResponse } from './model/user';
 import {
   queryOptions,
   useMutation,

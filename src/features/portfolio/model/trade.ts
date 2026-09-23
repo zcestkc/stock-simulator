@@ -1,4 +1,4 @@
-import { PortfolioResponse } from './portfolio';
+import type { PortfolioResponse } from './portfolio';
 
 // Mirrors TradeDTO.
 export type TradeResponse = {

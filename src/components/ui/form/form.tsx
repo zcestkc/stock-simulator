@@ -1,22 +1,24 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as LabelPrimitive from '@radix-ui/react-label';
+import type * as LabelPrimitive from '@radix-ui/react-label';
 import { Slot } from '@radix-ui/react-slot';
 import * as React from 'react';
-import {
-  Controller,
+import type {
   ControllerProps,
   FieldPath,
   FieldValues,
-  FormProvider,
   SubmitHandler,
   UseFormProps,
   UseFormReturn,
+} from 'react-hook-form';
+import {
+  Controller,
+  FormProvider,
   useForm,
   useFormContext,
 } from 'react-hook-form';
-import { z } from 'zod';
+import type { z } from 'zod';
 import type { $ZodType } from 'zod/v4/core';
 
 import { cn } from '@/utils/cn';
