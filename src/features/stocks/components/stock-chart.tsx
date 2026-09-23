@@ -1,6 +1,7 @@
 'use client';
 
 import { StockCandle } from '@/types/api';
+import { tokenColor } from '@/utils/css-tokens';
 import {
   AreaSeries,
   CandlestickSeries,
@@ -12,9 +13,6 @@ import {
 import { useEffect, useRef } from 'react';
 
 export type ChartType = 'candles' | 'line';
-
-const UP = '#16a34a';
-const DOWN = '#dc2626';
 
 type StockChartProps = {
   candles: StockCandle[];
@@ -37,16 +35,19 @@ export const StockChart = ({
     const container = containerRef.current;
     if (!container) return;
 
+    const up = tokenColor('positive');
+    const down = tokenColor('negative');
+
     const chart = createChart(container, {
       autoSize: true,
       layout: {
-        background: { type: ColorType.Solid, color: 'white' },
-        textColor: '#6b7280',
+        background: { type: ColorType.Solid, color: tokenColor('card') },
+        textColor: tokenColor('muted-foreground'),
         attributionLogo: true, // required by the lightweight-charts licence
       },
       grid: {
-        vertLines: { color: '#f3f4f6' },
-        horzLines: { color: '#f3f4f6' },
+        vertLines: { color: tokenColor('chart-grid') },
+        horzLines: { color: tokenColor('chart-grid') },
       },
       rightPriceScale: { borderVisible: false },
       timeScale: {
@@ -65,10 +66,10 @@ export const StockChart = ({
     if (type === 'candles') {
       chart
         .addSeries(CandlestickSeries, {
-          upColor: UP,
-          downColor: DOWN,
-          wickUpColor: UP,
-          wickDownColor: DOWN,
+          upColor: up,
+          downColor: down,
+          wickUpColor: up,
+          wickDownColor: down,
           borderVisible: false,
         })
         .setData(
@@ -81,12 +82,12 @@ export const StockChart = ({
           })),
         );
     } else {
-      const color = rising ? UP : DOWN;
+      const color = rising ? 'positive' : 'negative';
       chart
         .addSeries(AreaSeries, {
-          lineColor: color,
-          topColor: `${color}33`,
-          bottomColor: `${color}00`,
+          lineColor: tokenColor(color),
+          topColor: tokenColor(color, 0.2),
+          bottomColor: tokenColor(color, 0),
           lineWidth: 2,
         })
         .setData(
@@ -108,7 +109,7 @@ export const StockChart = ({
       candles.map((c) => ({
         time: toTime(c.time),
         value: c.volume,
-        color: c.close >= c.open ? `${UP}55` : `${DOWN}55`,
+        color: tokenColor(c.close >= c.open ? 'positive' : 'negative', 0.33),
       })),
     );
 

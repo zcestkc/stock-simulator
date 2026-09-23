@@ -57,7 +57,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <aside className="fixed inset-y-0 left-0 z-10 hidden w-60 flex-col border-r bg-black sm:flex">
+      <aside className="fixed inset-y-0 left-0 z-10 hidden w-60 flex-col border-r bg-sidebar sm:flex">
         <nav className="flex flex-col gap-4 px-2 py-4">
           {navigation.map((item) => {
             const isActive = pathname === item.to;
@@ -66,12 +66,12 @@ const Layout = ({ children }: { children: ReactNode }) => {
                 key={item.name}
                 href={item.to}
                 className={cn(
-                  'text-gray-300 hover:bg-gray-700 hover:text-white group flex flex-1 w-full items-center rounded-md p-2 text-base font-medium',
-                  isActive && 'bg-gray-900 text-white',
+                  'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-active-foreground group flex flex-1 w-full items-center rounded-md p-2 text-base font-medium',
+                  isActive && 'bg-sidebar-active text-sidebar-active-foreground',
                 )}
               >
                 <item.icon
-                  className="text-gray-400 group-hover:text-gray-300 mr-4 size-6 shrink-0"
+                  className="text-sidebar-muted group-hover:text-sidebar-foreground mr-4 size-6 shrink-0"
                   aria-hidden="true"
                 />
                 {item.name}
@@ -91,7 +91,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
             </DrawerTrigger>
             <DrawerContent
               side="left"
-              className="bg-black pt-10 text-white sm:max-w-60"
+              className="bg-sidebar pt-10 text-sidebar-active-foreground sm:max-w-60"
             >
               <nav className="grid gap-6 text-lg font-medium">
                 <DrawerHeader>
@@ -104,14 +104,14 @@ const Layout = ({ children }: { children: ReactNode }) => {
                       key={item.name}
                       href={item.to}
                       className={cn(
-                        'text-gray-300 hover:bg-gray-700 hover:text-white',
+                        'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-active-foreground',
                         'group flex flex-1 w-full items-center rounded-md p-2 text-base font-medium',
-                        isActive && 'bg-gray-900 text-white',
+                        isActive && 'bg-sidebar-active text-sidebar-active-foreground',
                       )}
                     >
                       <item.icon
                         className={cn(
-                          'text-gray-400 group-hover:text-gray-300',
+                          'text-sidebar-muted group-hover:text-sidebar-foreground',
                           'mr-4 size-6 shrink-0',
                         )}
                         aria-hidden="true"
@@ -137,13 +137,13 @@ const Layout = ({ children }: { children: ReactNode }) => {
             <DropdownMenuContent align="end">
               <DropdownMenuItem
                 onClick={() => router.push(paths.app.profile.getHref())}
-                className={cn('block px-4 py-2 text-sm text-gray-700')}
+                className={cn('block px-4 py-2 text-sm text-popover-foreground')}
               >
                 Your Profile
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                className={cn('block px-4 py-2 text-sm text-gray-700 w-full')}
+                className={cn('block px-4 py-2 text-sm text-popover-foreground w-full')}
                 onClick={() => logout.mutate()}
               >
                 Sign Out

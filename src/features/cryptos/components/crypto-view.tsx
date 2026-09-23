@@ -2,6 +2,7 @@
 
 import { paths } from '@/config/paths';
 import { Crypto } from '@/types/api';
+import { tokenColor } from '@/utils/css-tokens';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import {
@@ -66,7 +67,7 @@ export const CryptoView = ({ cryptoId }: { cryptoId: string }) => {
     <div>
       <Link
         href={paths.app.cryptos.getHref()}
-        className="flex items-center gap-2 text-gray-500"
+        className="flex items-center gap-2 text-muted-foreground"
       >
         <ArrowLeftIcon /> Go Back
       </Link>
@@ -78,7 +79,7 @@ export const CryptoView = ({ cryptoId }: { cryptoId: string }) => {
             <XAxis dataKey="date" />
             <Tooltip />
             <Legend />
-            <Line dataKey="open" stroke="#8884d8" name="Open" dot={false} />
+            <Line dataKey="open" stroke={tokenColor('chart-1')} name="Open" dot={false} />
             {/* <Line dataKey="high" stroke="#82ca9d" name="High" />
             <Line dataKey="low" stroke="#ffc658" name="Low" />
             <Line dataKey="close" stroke="#ffc658" name="Close" />

@@ -51,7 +51,7 @@ export const StocksList = () => {
 
   if (stocksQuery.isError) {
     return (
-      <div className="text-red-600">
+      <div className="text-destructive">
         Couldn&apos;t load stock prices. Is the API running?
       </div>
     );
@@ -67,18 +67,18 @@ export const StocksList = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search by symbol or name"
-          className="h-9 w-full max-w-xs rounded-md border border-input bg-white px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          className="h-9 w-full max-w-xs rounded-md border border-input bg-card px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
         />
         {updatedAt && (
-          <span className="text-xs text-gray-500">
+          <span className="text-xs text-muted-foreground">
             Last trade {new Date(updatedAt).toLocaleString()}
           </span>
         )}
       </div>
 
-      <div className="overflow-x-auto rounded-lg border bg-white">
+      <div className="overflow-x-auto rounded-lg border bg-card">
         <table className="min-w-full text-sm">
-          <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-500">
+          <thead className="bg-muted text-left text-xs uppercase tracking-wide text-muted-foreground">
             <tr>
               <th className="px-4 py-3">Symbol</th>
               <th className="px-4 py-3">Name</th>
@@ -97,15 +97,15 @@ export const StocksList = () => {
             {stocks.map((stock) => {
               const direction =
                 stock.change > 0
-                  ? 'text-green-600'
+                  ? 'text-positive'
                   : stock.change < 0
-                    ? 'text-red-600'
-                    : 'text-gray-500';
+                    ? 'text-negative'
+                    : 'text-muted-foreground';
               return (
                 <tr
                   key={stock.symbol}
                   onClick={() => router.push(stockHref(stock.symbol))}
-                  className="cursor-pointer hover:bg-gray-50"
+                  className="cursor-pointer hover:bg-muted/50"
                 >
                   <td className="px-4 py-3 font-semibold">
                     <Link
@@ -115,7 +115,7 @@ export const StocksList = () => {
                       {stock.symbol}
                     </Link>
                   </td>
-                  <td className="max-w-64 truncate px-4 py-3 text-gray-600">
+                  <td className="max-w-64 truncate px-4 py-3 text-muted-foreground">
                     {stock.name}
                   </td>
                   <td className="px-4 py-3 text-right tabular-nums">
@@ -137,12 +137,12 @@ export const StocksList = () => {
                   >
                     {formatSigned(stock.changePercent, '%')}
                   </td>
-                  <td className="hidden px-4 py-3 text-right tabular-nums text-gray-600 md:table-cell">
+                  <td className="hidden px-4 py-3 text-right tabular-nums text-muted-foreground md:table-cell">
                     {stock.dayLow != null && stock.dayHigh != null
                       ? `${stock.dayLow.toFixed(2)} – ${stock.dayHigh.toFixed(2)}`
                       : '—'}
                   </td>
-                  <td className="hidden px-4 py-3 text-right tabular-nums text-gray-600 md:table-cell">
+                  <td className="hidden px-4 py-3 text-right tabular-nums text-muted-foreground md:table-cell">
                     {formatVolume(stock.volume)}
                   </td>
                 </tr>
@@ -150,7 +150,10 @@ export const StocksList = () => {
             })}
             {stocks.length === 0 && (
               <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-gray-500">
+                <td
+                  colSpan={7}
+                  className="px-4 py-8 text-center text-muted-foreground"
+                >
                   No stocks match &quot;{search}&quot;
                 </td>
               </tr>

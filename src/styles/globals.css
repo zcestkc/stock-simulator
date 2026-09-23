@@ -2,22 +2,66 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #171717;
-  --foreground: #ffffff;
-}
-
-@media (prefers-color-scheme: dark) {
+/*
+ * Design tokens. Every colour in the app comes from here — see CLAUDE.md.
+ * Values are HSL channels (no hsl() wrapper) so Tailwind can apply opacity,
+ * e.g. `bg-primary/90`. Use via Tailwind classes (`text-positive`) or, in JS,
+ * via `tokenColor('positive')` from '@/utils/css-tokens'.
+ */
+@layer base {
   :root {
-    --background: #ededed;
-    --foreground: #0a0a0a;
-  }
-}
+    --background: 0 0% 93%;
+    --foreground: 221 39% 11%;
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
-    'Helvetica Neue', sans-serif;
+    --card: 0 0% 100%;
+    --card-foreground: 221 39% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 221 39% 11%;
+
+    --primary: 221 39% 11%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 13% 91%;
+    --secondary-foreground: 221 39% 11%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+    --accent: 220 14% 96%;
+    --accent-foreground: 221 39% 11%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Market direction: price up / price down */
+    --positive: 142 76% 36%;
+    --negative: 0 72% 51%;
+
+    --info: 217 91% 60%;
+    --warning: 45 93% 47%;
+    --link: 221 83% 53%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 215 16% 47%;
+    --overlay: 0 0% 0%;
+
+    --sidebar: 0 0% 0%;
+    --sidebar-foreground: 216 12% 84%;
+    --sidebar-muted: 218 11% 65%;
+    --sidebar-accent: 217 19% 27%;
+    --sidebar-active: 221 39% 11%;
+    --sidebar-active-foreground: 0 0% 100%;
+
+    --chart-grid: 220 14% 96%;
+    --chart-1: 244 55% 68%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+      'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+      'Helvetica Neue', sans-serif;
+  }
 }

@@ -58,7 +58,7 @@ export const LoginForm = ({ onSuccess }: LoginFormProps) => {
         <div className="text-sm">
           <NextLink
             href={paths.auth.register.getHref(redirectTo)}
-            className="font-medium text-blue-600 hover:text-blue-500"
+            className="font-medium text-link hover:text-link/80"
           >
             Register
           </NextLink>

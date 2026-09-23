@@ -27,7 +27,11 @@ const formatSigned = (value: number, suffix = '') =>
   `${value > 0 ? '+' : ''}${value.toFixed(2)}${suffix}`;
 
 const directionClass = (value: number) =>
-  value > 0 ? 'text-green-600' : value < 0 ? 'text-red-600' : 'text-gray-500';
+  value > 0
+    ? 'text-positive'
+    : value < 0
+      ? 'text-negative'
+      : 'text-muted-foreground';
 
 export const StockView = ({ symbol }: { symbol: string }) => {
   const [range, setRange] = useState<StockRange>('1d');
@@ -52,14 +56,14 @@ export const StockView = ({ symbol }: { symbol: string }) => {
     <div className="space-y-4">
       <Link
         href={paths.app.stocks.getHref()}
-        className="flex items-center gap-2 text-gray-500"
+        className="flex items-center gap-2 text-muted-foreground"
       >
         <ArrowLeftIcon /> Back to stocks
       </Link>
 
       {stock && (
         <div>
-          <p className="text-gray-600">
+          <p className="text-muted-foreground">
             {stock.name} · {stock.exchange}
           </p>
           <p className="text-3xl font-semibold tabular-nums">
@@ -71,7 +75,7 @@ export const StockView = ({ symbol }: { symbol: string }) => {
             >
               {formatSigned(rangeChange.change)} (
               {formatSigned(rangeChange.percent, '%')}){' '}
-              <span className="text-gray-500">
+              <span className="text-muted-foreground">
                 {range === '1d' ? 'today' : `past ${RANGE_LABELS[range]}`}
               </span>
             </p>
@@ -86,8 +90,9 @@ export const StockView = ({ symbol }: { symbol: string }) => {
               key={r}
               onClick={() => setRange(r)}
               className={cn(
-                'rounded-md px-3 py-1 text-sm font-medium text-gray-600 hover:bg-gray-100',
-                r === range && 'bg-gray-900 text-white hover:bg-gray-900',
+                'rounded-md px-3 py-1 text-sm font-medium text-muted-foreground hover:bg-accent',
+                r === range &&
+                  'bg-primary text-primary-foreground hover:bg-primary',
               )}
             >
               {RANGE_LABELS[r]}
@@ -100,8 +105,8 @@ export const StockView = ({ symbol }: { symbol: string }) => {
               key={t}
               onClick={() => setChartType(t)}
               className={cn(
-                'rounded-md px-3 py-1 text-sm font-medium capitalize text-gray-600 hover:bg-gray-100',
-                t === chartType && 'bg-gray-200 text-gray-900',
+                'rounded-md px-3 py-1 text-sm font-medium capitalize text-muted-foreground hover:bg-accent',
+                t === chartType && 'bg-secondary text-secondary-foreground',
               )}
             >
               {t}
@@ -112,7 +117,7 @@ export const StockView = ({ symbol }: { symbol: string }) => {
 
       <div
         className={cn(
-          'relative rounded-lg border bg-white p-2',
+          'relative rounded-lg border bg-card p-2',
           historyQuery.isPlaceholderData && 'opacity-60',
         )}
       >
@@ -121,7 +126,7 @@ export const StockView = ({ symbol }: { symbol: string }) => {
             <Spinner size="lg" />
           </div>
         ) : historyQuery.isError || !history ? (
-          <div className="flex h-[300px] items-center sm:h-[420px] justify-center text-red-600">
+          <div className="flex h-[300px] items-center sm:h-[420px] justify-center text-destructive">
             Couldn&apos;t load chart data.
           </div>
         ) : (
@@ -136,7 +141,7 @@ export const StockView = ({ symbol }: { symbol: string }) => {
       </div>
 
       {stock && (
-        <dl className="grid grid-cols-2 gap-4 rounded-lg border bg-white p-4 text-sm sm:grid-cols-4">
+        <dl className="grid grid-cols-2 gap-4 rounded-lg border bg-card p-4 text-sm sm:grid-cols-4">
           <Stat label="Previous close" value={stock.previousClose.toFixed(2)} />
           <Stat label="Day low" value={stock.dayLow?.toFixed(2) ?? '—'} />
           <Stat label="Day high" value={stock.dayHigh?.toFixed(2) ?? '—'} />
@@ -152,7 +157,7 @@ export const StockView = ({ symbol }: { symbol: string }) => {
 
 const Stat = ({ label, value }: { label: string; value: string }) => (
   <div>
-    <dt className="text-gray-500">{label}</dt>
+    <dt className="text-muted-foreground">{label}</dt>
     <dd className="font-medium tabular-nums">{value}</dd>
   </div>
 );
