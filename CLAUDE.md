@@ -36,6 +36,10 @@ Tailwind CSS 3, TanStack Query 5. Early stage.
   used by both the `/api` proxy and middleware. Don't add refresh logic anywhere else.
 - New Tailwind class locations must be covered by `content` in `tailwind.config.ts`, or the
   classes silently won't be generated.
+- **React 19: no `forwardRef`.** `ref` is a regular prop. Type props with
+  `React.ComponentProps<'button'>` / `React.ComponentProps<typeof Primitive.Root>` (these include
+  `ref`) and spread them onto the element. Don't set `displayName` on named components, and avoid
+  `ComponentPropsWithoutRef` / `ElementRef`.
 - Features don't import from other features. Shared code goes in `components/`, `lib/`,
   `utils/`, `types/`.
 

@@ -1,6 +1,6 @@
 import { cn } from '@/utils/cn';
 import { cva, VariantProps } from 'class-variance-authority';
-import React, { RefObject } from 'react';
+import React from 'react';
 import { Spinner } from '../spinner/spinner';
 
 const buttonVariants = cva(
@@ -33,11 +33,10 @@ const buttonVariants = cva(
   },
 );
 
-export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
+export type ButtonProps = React.ComponentProps<'button'> &
   VariantProps<typeof buttonVariants> & {
     isLoading?: boolean;
     icon?: React.ReactNode;
-    ref?: RefObject<HTMLButtonElement>;
   };
 
 const Button = ({
@@ -47,13 +46,11 @@ const Button = ({
   children,
   isLoading,
   icon,
-  ref,
   ...props
 }: ButtonProps) => {
   return (
     <button
       className={cn(buttonVariants({ variant, size, className }))}
-      ref={ref}
       {...props}
     >
       {isLoading && <Spinner size="sm" className="text-current" />}
@@ -62,6 +59,5 @@ const Button = ({
     </button>
   );
 };
-Button.displayName = 'Button';
 
 export { Button, buttonVariants };
