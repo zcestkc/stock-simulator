@@ -5,7 +5,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 // (enforced by StockSimulatorApi, e.g. [Authorize] on PortfolioController).
 // This middleware never blocks a page. It only keeps a logged-in user's session fresh:
 // if the access token has expired, it refreshes before any server component renders.
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const refreshToken = request.cookies.get('refreshToken')?.value;
   if (!refreshToken || request.cookies.has('accessToken')) {
     return NextResponse.next(); // logged out, or access token still valid

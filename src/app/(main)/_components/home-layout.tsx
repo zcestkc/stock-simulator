@@ -30,7 +30,7 @@ import {
 import { default as Link } from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { JSX, ReactNode } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorBoundary, type FallbackProps } from 'react-error-boundary';
 
 type SideNavigationItem = {
   name: string;
@@ -177,8 +177,13 @@ const Layout = ({ children }: { children: ReactNode }) => {
   );
 };
 
-function Fallback({ error }: { error: Error }) {
-  return <p>Error: {error.message ?? 'Something went wrong!'}</p>;
+// react-error-boundary 6: `error` is `unknown` (anything can be thrown).
+function Fallback({ error }: FallbackProps) {
+  return (
+    <p>
+      Error: {error instanceof Error ? error.message : 'Something went wrong!'}
+    </p>
+  );
 }
 
 const HomeLayout = ({ children }: { children: ReactNode }) => {

@@ -1,6 +1,7 @@
 /// <reference types="vitest" />
 
-import react from '@vitejs/plugin-react';
+import babel from '@rolldown/plugin-babel';
+import react, { reactCompilerPreset } from '@vitejs/plugin-react';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 import { defineConfig } from 'vitest/config';
 
@@ -9,7 +10,8 @@ export default defineConfig({
   plugins: [
     // Compile with the React Compiler, like the app (next.config.ts), so tests catch
     // components that break when auto-memoised.
-    react({ babel: { plugins: ['babel-plugin-react-compiler'] } }),
+    react(),
+    babel({ presets: [reactCompilerPreset()] }),
     viteTsconfigPaths(),
   ],
   test: {

@@ -16,7 +16,8 @@ import {
   useForm,
   useFormContext,
 } from 'react-hook-form';
-import { ZodType, z } from 'zod';
+import { z } from 'zod';
+import type { $ZodType } from 'zod/v4/core';
 
 import { cn } from '@/utils/cn';
 
@@ -158,30 +159,36 @@ const FormMessage = ({
   );
 };
 
-type FormProps<TFormValues extends FieldValues, Schema> = {
-  onSubmit: SubmitHandler<TFormValues>;
+// Zod 4 separates a schema's input (what the fields hold) from its output (what submit
+// receives, after transforms like .trim()); react-hook-form types both.
+type FormSchema = $ZodType<FieldValues, FieldValues>;
+
+type FormProps<Schema extends FormSchema> = {
+  onSubmit: SubmitHandler<z.output<Schema>>;
   schema: Schema;
   className?: string;
-  children: (methods: UseFormReturn<TFormValues>) => React.ReactNode;
-  options?: UseFormProps<TFormValues>;
+  children: (
+    methods: UseFormReturn<z.input<Schema>, unknown, z.output<Schema>>,
+  ) => React.ReactNode;
+  options?: UseFormProps<z.input<Schema>, unknown, z.output<Schema>>;
   id?: string;
 };
 
-const Form = <
-  Schema extends ZodType<any, any, any>,
-  TFormValues extends FieldValues = z.infer<Schema>,
->({
+const Form = <Schema extends FormSchema>({
   onSubmit,
   children,
   className,
   options,
   id,
   schema,
-}: FormProps<TFormValues, Schema>) => {
+}: FormProps<Schema>) => {
   // react-hook-form's `form`/`formState` keep the same identity while their contents change,
   // so the React Compiler would memoise `children(form)` and errors would never render.
   'use no memo';
-  const form = useForm({ ...options, resolver: zodResolver(schema) });
+  const form = useForm<z.input<Schema>, unknown, z.output<Schema>>({
+    ...options,
+    resolver: zodResolver(schema),
+  });
   return (
     <FormProvider {...form}>
       <form

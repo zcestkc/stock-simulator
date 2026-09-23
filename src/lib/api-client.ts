@@ -62,22 +62,19 @@ export function getServerCookies() {
   if (typeof window !== 'undefined') return '';
 
   // Dynamic import next/headers only on server-side
+  // No try/catch: cookies() throws a special signal that tells Next the route is dynamic,
+  // and it must reach Next (catching it logs a bogus error and fights the renderer).
   return import('next/headers').then(async ({ cookies }) => {
-    try {
-      const cookieStore = await cookies();
-      return cookieStore
-        .getAll()
-        .map((c) => `${c.name}=${c.value}`)
-        .join('; ');
-    } catch (error) {
-      console.error('Failed to access cookies:', error);
-      return '';
-    }
+    const cookieStore = await cookies();
+    return cookieStore
+      .getAll()
+      .map((c) => `${c.name}=${c.value}`)
+      .join('; ');
   });
 }
 
 // Browser: same-origin /api, proxied to StockSimulatorApi by app/api/[...path]/route.ts (which also
-// refreshes expired access tokens). Server: straight to StockSimulatorApi; middleware has already
+// refreshes expired access tokens). Server: straight to StockSimulatorApi; proxy.ts has already
 // ensured a fresh access token for page requests.
 function getBaseUrl(): string {
   if (typeof window !== 'undefined') return '/api';
