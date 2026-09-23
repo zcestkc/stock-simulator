@@ -13,7 +13,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    // suppressHydrationWarning: next-themes sets the `dark` class before React hydrates.
+    <html lang="en" suppressHydrationWarning>
       <body>
         <AppProvider>{children}</AppProvider>
       </body>

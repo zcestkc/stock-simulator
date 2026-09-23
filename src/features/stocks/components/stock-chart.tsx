@@ -1,6 +1,7 @@
 'use client';
 
 import { StockCandle } from '@/types/api';
+import { useTheme } from 'next-themes';
 import { tokenColor } from '@/utils/css-tokens';
 import {
   AreaSeries,
@@ -30,6 +31,8 @@ export const StockChart = ({
   rising,
 }: StockChartProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  // Colours are read from CSS tokens at creation, so rebuild when the theme changes.
+  const { resolvedTheme } = useTheme();
 
   useEffect(() => {
     const container = containerRef.current;
@@ -116,7 +119,7 @@ export const StockChart = ({
     chart.timeScale().fitContent();
 
     return () => chart.remove();
-  }, [candles, gmtOffset, intraday, type, rising]);
+  }, [candles, gmtOffset, intraday, type, rising, resolvedTheme]);
 
   // The chart is absolutely positioned so its canvas width doesn't hold the layout open;
   // otherwise the parent can't shrink and autoSize never sees a smaller width.

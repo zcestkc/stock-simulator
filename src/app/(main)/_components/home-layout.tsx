@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { ThemeToggle } from '@/components/ui/theme-toggle/theme-toggle';
 import {
   Drawer,
   DrawerContent,
@@ -126,45 +127,48 @@ const Layout = ({ children }: { children: ReactNode }) => {
               </nav>
             </DrawerContent>
           </Drawer>
-          {user.data ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="overflow-hidden rounded-full"
-                >
-                  <span className="sr-only">Open user menu</span>
-                  <User2 className="size-6 rounded-full" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem
-                  onClick={() => router.push(paths.app.profile.getHref())}
-                  className={cn(
-                    'block px-4 py-2 text-sm text-popover-foreground',
-                  )}
-                >
-                  Your Profile
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className={cn(
-                    'block px-4 py-2 text-sm text-popover-foreground w-full',
-                  )}
-                  onClick={() => logout.mutate()}
-                >
-                  Sign Out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            !user.isLoading && (
-              <Link href={paths.auth.login.getHref(pathname)}>
-                <Button variant="outline">Log in</Button>
-              </Link>
-            )
-          )}
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            {user.data ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="overflow-hidden rounded-full"
+                  >
+                    <span className="sr-only">Open user menu</span>
+                    <User2 className="size-6 rounded-full" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem
+                    onClick={() => router.push(paths.app.profile.getHref())}
+                    className={cn(
+                      'block px-4 py-2 text-sm text-popover-foreground',
+                    )}
+                  >
+                    Your Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className={cn(
+                      'block px-4 py-2 text-sm text-popover-foreground w-full',
+                    )}
+                    onClick={() => logout.mutate()}
+                  >
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              !user.isLoading && (
+                <Link href={paths.auth.login.getHref(pathname)}>
+                  <Button variant="outline">Log in</Button>
+                </Link>
+              )
+            )}
+          </div>
         </header>
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
           {children}

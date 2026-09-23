@@ -2,6 +2,7 @@
 
 import { paths } from '@/config/paths';
 import { Crypto } from '@/types/api';
+import { useTheme } from 'next-themes';
 import { tokenColor } from '@/utils/css-tokens';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
@@ -19,6 +20,7 @@ import { testData } from '../../../../mock';
 import { useCrypto } from '../api/get-crypto';
 
 export const CryptoView = ({ cryptoId }: { cryptoId: string }) => {
+  useTheme(); // re-render with new token colours on theme change
   const cryptoQuery = useCrypto({
     cryptoId,
   });

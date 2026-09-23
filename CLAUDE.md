@@ -28,6 +28,14 @@ Tailwind CSS 3, TanStack Query 5. Early stage.
     `--light-grey`) in `globals.css`, then register it under the right role in
     `tailwind.config.ts` (skip that for JS-only tokens).
   - Price direction is always `positive` (up) / `negative` (down); errors are `destructive`.
+  - **Dark mode** is the same tokens with different values under `.dark` in `globals.css`.
+    A new token needs a value in both `:root` and `.dark`. Don't use `dark:` colour classes;
+    `dark:` is only for non-colour tweaks (e.g. `dark:invert` on the black logo image).
+    Theme is handled by `next-themes` (`ThemeProvider` in `app/provider.tsx`: Light/Dark/System,
+    saved in localStorage under `theme`, System follows the OS, no flash on load). Read it with
+    `useTheme()` from `next-themes`; `theme`/`resolvedTheme` are only reliable after mount.
+    Anything that reads `tokenColor()` once (e.g. canvas charts) must re-run when
+    `resolvedTheme` changes.
 - **The browser only talks to this Next.js app.** Client code calls same-origin `/api/*`
   through `lib/api-client.ts`; never call StalkApi or third-party APIs from the browser, and
   never put the API URL or keys in `NEXT_PUBLIC_*` vars. (The old Alpha Vantage crypto code
