@@ -1,5 +1,4 @@
 import { useNotifications } from '@/components/ui/notifications';
-import { env } from '@/config/env';
 
 type RequestOptions = {
   method?: string;
@@ -47,10 +46,19 @@ export function getServerCookies() {
   });
 }
 
+// Browser: same-origin /api, proxied to StalkApi by app/api/[...path]/route.ts (which also
+// refreshes expired access tokens). Server: straight to StalkApi; middleware has already
+// ensured a fresh access token for page requests.
+function getBaseUrl(): string {
+  if (typeof window !== 'undefined') return '/api';
+  const url = process.env.API_URL;
+  if (!url) throw new Error('API_URL is not set (see .env)');
+  return url;
+}
+
 async function fetchApi<T>(
   url: string,
   options: RequestOptions = {},
-  isRetry = false,
 ): Promise<T> {
   const {
     method = 'GET',
@@ -65,12 +73,12 @@ async function fetchApi<T>(
 
   // Get cookies from the request when running on server
   let cookieHeader = cookie;
-  if (typeof window === 'undefined' && !cookie) {
+  if (typeof window === 'undefined' && !cookie && !external) {
     cookieHeader = await getServerCookies();
   }
 
   const fullUrl = buildUrlWithParams(
-    external ? url : `${env.API_URL}${url}`,
+    external ? url : `${getBaseUrl()}${url}`,
     params,
   );
 
@@ -83,18 +91,10 @@ async function fetchApi<T>(
       ...(cookieHeader ? { Cookie: cookieHeader } : {}),
     },
     body: body ? JSON.stringify(body) : undefined,
-    credentials: 'include',
+    credentials: 'same-origin',
     cache,
     next,
   });
-
-  // works on client component, not server, it uses pre middleware cookie value so i get 401 in the api call and the refresh call
-  if (response.status === 401 && !isRetry) {
-    const refreshed = await refreshAccessToken();
-    if (refreshed) {
-      return fetchApi<T>(url, options, true); // Retry with new token
-    }
-  }
 
   if (!response.ok) {
     console.log('failed for', url, response.status);
@@ -110,30 +110,9 @@ async function fetchApi<T>(
     throw new Error(message);
   }
 
-  return response.json();
-}
-
-async function refreshAccessToken(): Promise<boolean> {
-  try {
-    console.log('refreshing in api client with ', await getServerCookies());
-    const refreshRes = await fetch(`${env.API_URL}/auth/refresh-token`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        Cookie: await getServerCookies(),
-      },
-      credentials: 'include',
-    });
-
-    if (refreshRes.ok) {
-      console.log('refreshed successfully in api client');
-      return true; // Successfully refreshed token
-    }
-  } catch (error) {
-    console.error('Error refreshing token:', error);
-  }
-  return false;
+  // Some endpoints (e.g. logout) may return an empty body
+  const text = await response.text();
+  return (text ? JSON.parse(text) : undefined) as T;
 }
 
 export const api = {

@@ -4,13 +4,11 @@ import 'dotenv/config';
 const createEnv = () => {
   const EnvSchema = z.object({
     ALPHA_VANTAGE_API_KEY: z.string(),
-    API_URL: z.string(),
     DEV: z.string(),
   });
 
   const envVars = {
     ALPHA_VANTAGE_API_KEY: process.env.NEXT_PUBLIC_ALPHA_VANTAGE_API_KEY,
-    API_URL: process.env.NEXT_PUBLIC_API_URL,
     DEV: process.env.NEXT_PUBLIC_DEV,
   };
 
