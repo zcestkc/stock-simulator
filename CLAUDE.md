@@ -43,6 +43,10 @@ Tailwind CSS 3, TanStack Query 5. Early stage.
   portfolio), and that's enforced by the API (`[Authorize]`), not by page routing. Logged-out
   UI shows a "Log in" prompt that returns the user to where they were (`?redirectTo=`); never
   redirect a page to login. `useUser().data === null` means logged out.
+- **Never trust `?redirectTo=`** (or any URL param used for navigation): it's user input, anyone
+  can craft a link. Read it with `useRedirectParam()` / `getSafeRedirect()` from `features/auth`,
+  which only allow same-site paths (open-redirect protection, unit-tested). Post-login navigation
+  happens in one place: `useRedirectIfLoggedIn()` on the login/register pages.
 - **Token refresh lives in one function**, `refreshTokens()` in `lib/server/api-upstream.ts`,
   used by both the `/api` proxy and middleware. Don't add refresh logic anywhere else.
 - **URLs come from `config/paths.ts`** (`paths.app.stocks.getHref()`), never hard-coded strings.
@@ -56,6 +60,10 @@ Tailwind CSS 3, TanStack Query 5. Early stage.
   mutating props/state; `yarn lint` checks them). Don't set state directly in an effect body
   (`react-hooks/set-state-in-effect`): derive it during render instead. To opt a
   component out while debugging, put `'use no memo';` at the top of its body.
+  **Known incompatibility:** `react-hook-form` (its `form`/`formState` keep the same identity while
+  changing), so `components/ui/form/form.tsx` opts out with `'use no memo'`; without it,
+  validation errors never render. Vitest also compiles with the React Compiler
+  (`vitest.config.ts`) so tests catch this; `login-form.test.tsx` has a regression test.
 - **React 19: no `forwardRef`.** `ref` is a regular prop. Type props with
   `React.ComponentProps<'button'>` / `React.ComponentProps<typeof Primitive.Root>` (these include
   `ref`) and spread them onto the element. Don't set `displayName` on named components, and avoid
@@ -118,7 +126,8 @@ Loosely follows [bulletproof-react](https://github.com/alan2207/bulletproof-reac
 src/
 ├── app/                      # Next.js routes only — thin pages that compose features
 │   ├── page.tsx              #   / landing page (no sidebar)
-│   ├── auth/                 #   /auth/login, /auth/register (auth layout)
+│   ├── auth/                 #   /auth/login, /auth/register: thin pages (AuthCard + form);
+│   │                         #   _components/auth-layout is the frame only (logo, no logic)
 │   ├── api/[...path]/        #   /api/* BFF proxy route to StockSimulatorApi
 │   └── (main)/               #   route group: shares the sidebar layout, adds nothing to the URL
 │       ├── layout.tsx        #     wraps pages in _components/home-layout (side nav + header)

@@ -1,17 +1,17 @@
 'use client';
 
-import { LoginForm } from '@/features/auth/components/login-form';
+import { RegisterForm } from '@/features/auth/components/register-form';
 import { useRedirectIfLoggedIn } from '@/features/auth/hooks/use-redirect-if-logged-in';
 import { AuthCard } from '../_components/auth-card';
 
-const LoginPage = () => {
+const RegisterPage = () => {
   useRedirectIfLoggedIn();
 
   return (
-    <AuthCard title="Log in to your account">
-      <LoginForm />
+    <AuthCard title="Create your account">
+      <RegisterForm />
     </AuthCard>
   );
 };
 
-export default LoginPage;
+export default RegisterPage;

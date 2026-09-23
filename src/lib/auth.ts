@@ -69,7 +69,7 @@ const logout = (): Promise<void> => {
 
 export const loginInputSchema = z.object({
   username: z.string().min(1, 'Required'),
-  password: z.string().min(3, 'Required'),
+  password: z.string().min(1, 'Required'),
 });
 
 export type LoginInput = z.infer<typeof loginInputSchema>;
@@ -79,15 +79,32 @@ const loginWithUsernameAndPassword = (
   return api.post('/auth/login', data);
 };
 
-export const registerInputSchema = z.object({
-  register: z.string().min(1, 'Required'),
-  password: z.string().min(5, 'Required'),
-});
+// Mirrors RegisterRequestDTO in the API; keep the limits in sync.
+export const registerInputSchema = z
+  .object({
+    username: z
+      .string()
+      .trim()
+      .min(3, 'At least 3 characters')
+      .max(32, 'At most 32 characters')
+      .regex(/^[A-Za-z0-9_.-]+$/, "Only letters, numbers, '.', '_' and '-'"),
+    password: z
+      .string()
+      .min(8, 'At least 8 characters')
+      .max(128, 'At most 128 characters'),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword'],
+  });
 
 export type RegisterInput = z.infer<typeof registerInputSchema>;
 
-const registerWithUsernameAndPassword = (
-  data: RegisterInput,
-): Promise<AuthResponse> => {
-  return api.post('/auth/register', data);
+// Registering also logs the user in (the API sets the auth cookies).
+const registerWithUsernameAndPassword = ({
+  username,
+  password,
+}: RegisterInput): Promise<AuthResponse> => {
+  return api.post('/auth/register', { username, password });
 };

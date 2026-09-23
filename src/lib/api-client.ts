@@ -25,7 +25,13 @@ export class ApiError extends Error {
 function errorMessage(body: string, fallback: string): string {
   if (!body) return fallback;
   try {
-    const json = JSON.parse(body) as { message?: string; title?: string };
+    const json = JSON.parse(body) as {
+      message?: string;
+      title?: string;
+      errors?: Record<string, string[]>;
+    };
+    const validation = json.errors && Object.values(json.errors).flat();
+    if (validation?.length) return validation.join(' ');
     return json.message ?? json.title ?? fallback;
   } catch {
     return body;

@@ -178,6 +178,9 @@ const Form = <
   id,
   schema,
 }: FormProps<TFormValues, Schema>) => {
+  // react-hook-form's `form`/`formState` keep the same identity while their contents change,
+  // so the React Compiler would memoise `children(form)` and errors would never render.
+  'use no memo';
   const form = useForm({ ...options, resolver: zodResolver(schema) });
   return (
     <FormProvider {...form}>

@@ -6,7 +6,12 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   base: './',
-  plugins: [react(), viteTsconfigPaths()],
+  plugins: [
+    // Compile with the React Compiler, like the app (next.config.ts), so tests catch
+    // components that break when auto-memoised.
+    react({ babel: { plugins: ['babel-plugin-react-compiler'] } }),
+    viteTsconfigPaths(),
+  ],
   test: {
     globals: true,
     environment: 'jsdom',

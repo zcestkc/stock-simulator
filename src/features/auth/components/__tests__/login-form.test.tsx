@@ -16,7 +16,8 @@ vi.mock('@/lib/auth', async () => {
 
 // Mock useSearchParams
 vi.mock('next/navigation', () => ({
-  useSearchParams: vi.fn(),
+  useSearchParams: vi.fn(() => new URLSearchParams()),
+  useRouter: vi.fn(),
 }));
 
 describe('LoginForm', () => {
@@ -34,5 +35,17 @@ describe('LoginForm', () => {
     await userEvent.click(screen.getByRole('button', { name: /log in/i }));
 
     await waitFor(() => expect(onSuccess).toHaveBeenCalledTimes(1));
+  });
+
+  // Regression: under the React Compiler, validation errors silently stopped rendering.
+  it('shows validation errors and does not submit when fields are empty', async () => {
+    const mutate = vi.fn();
+    (useLogin as jest.Mock).mockReturnValue({ mutate, isPending: false });
+
+    render(<LoginForm />);
+    await userEvent.click(screen.getByRole('button', { name: /log in/i }));
+
+    expect(await screen.findAllByRole('alert')).toHaveLength(2);
+    expect(mutate).not.toHaveBeenCalled();
   });
 });
