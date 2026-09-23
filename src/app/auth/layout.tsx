@@ -4,8 +4,8 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { AuthLayout as AuthLayoutComponent } from './_components/auth-layout';
 
 export const metadata = {
-  title: 'Stalk',
-  description: 'Welcome to Stalk',
+  title: 'Stock Simulator',
+  description: 'Welcome to Stock Simulator',
 };
 
 const AuthLayout = ({ children }: { children: ReactNode }) => {

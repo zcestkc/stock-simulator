@@ -3,8 +3,8 @@ import '@/styles/globals.css';
 import { AppProvider } from '@/app/provider';
 
 export const metadata: Metadata = {
-  title: 'Stalk',
-  description: 'Bookmark your favourite stocks',
+  title: 'Stock Simulator',
+  description: 'An investment simulator',
 };
 
 export default function RootLayout({

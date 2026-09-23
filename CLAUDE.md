@@ -1,4 +1,4 @@
-# Stalk — frontend
+# Stock Simulator — frontend
 
 Stock & crypto investment simulator. Next.js 15 (App Router) + React 19 + TypeScript,
 Tailwind CSS 3, TanStack Query 5. Early stage.
@@ -37,9 +37,9 @@ Tailwind CSS 3, TanStack Query 5. Early stage.
     Anything that reads `tokenColor()` once (e.g. canvas charts) must re-run when
     `resolvedTheme` changes.
 - **The browser only talks to this Next.js app.** Client code calls same-origin `/api/*`
-  through `lib/api-client.ts`; never call StalkApi or third-party APIs from the browser, and
+  through `lib/api-client.ts`; never call StockSimulatorApi or third-party APIs from the browser, and
   never put the API URL or keys in `NEXT_PUBLIC_*` vars. (The old Alpha Vantage crypto code
-  breaks this and is due to be moved behind StalkApi.)
+  breaks this and is due to be moved behind StockSimulatorApi.)
 - **Every page is public.** Login is only required for actions on the user's money (investing,
   portfolio), and that's enforced by the API (`[Authorize]`), not by page routing. Logged-out
   UI shows a "Log in" prompt that returns the user to where they were (`?redirectTo=`); never
@@ -60,26 +60,26 @@ Tailwind CSS 3, TanStack Query 5. Early stage.
 ## System design
 
 ```
-                ┌──────────── Next.js (stalk-fe, :3000) ────────────┐
+                ┌──────────── Next.js (stock-simulator, :3000) ────────────┐
 Browser ──────► │ pages (SSR)          ───┐                         │
-  same-origin   │ /api/* proxy route   ───┼──► StalkApi (.NET 9, :5030/api) ──► Postgres (Docker, :5432)
+  same-origin   │ /api/* proxy route   ───┼──► StockSimulatorApi (.NET 9, :5030/api) ──► Postgres (Docker, :5432)
   only          │ middleware (refresh) ───┘          │              │
                 └───────────────────────────────────┼──────────────┘
                                                      └──► Yahoo Finance (market data, cached)
 ```
 
-Next.js is a **backend-for-frontend (BFF)**: StalkApi is never called from the browser, so it
+Next.js is a **backend-for-frontend (BFF)**: StockSimulatorApi is never called from the browser, so it
 needs no CORS and its URL is server-only (`API_URL` in `.env`).
 
-- **StalkApi** (`../StalkApi`) owns everything: auth, users, and market data. It fetches
+- **StockSimulatorApi** (`../stock-simulator-api`) owns everything: auth, users, and market data. It fetches
   prices from Yahoo Finance behind an `IStockDataProvider` interface and caches them in memory
   (quotes 60s, history 1min–1h depending on range), so all users share each upstream fetch.
   Yahoo is unofficial; if it breaks, swap the provider — the frontend doesn't change.
 - **API calls** (`lib/api-client.ts`): in the browser, requests go to `/api/...`; on the server
   (server components), they go straight to `API_URL` with the request's cookies.
 - **`/api` proxy** (`app/api/[...path]/route.ts`): forwards method, path, query, body and
-  cookies to StalkApi and passes status, body and `Set-Cookie` back. On a 401 it refreshes the
-  tokens once and retries (not for `auth/login|register|logout|refresh-token`). If StalkApi
+  cookies to StockSimulatorApi and passes status, body and `Set-Cookie` back. On a 401 it refreshes the
+  tokens once and retries (not for `auth/login|register|logout|refresh-token`). If StockSimulatorApi
   is unreachable it returns 502.
 - **Auth**: JWT in httpOnly cookies (`accessToken` 5 min, `refreshToken` 30 days) set by the
   API and passed through the proxy. Pages never require login. `src/middleware.ts` only keeps a
@@ -88,6 +88,9 @@ needs no CORS and its URL is server-only (`API_URL` in `.env`).
   request see them); if refresh fails it clears the cookie and the visitor continues logged out.
   `lib/auth.ts` `getUser()` returns `null` on 401, and `api-client` never toasts 401s: being
   logged out is a normal state. Callers handle it with `isUnauthorized(error)`.
+- **Wallet** (`features/portfolio/components/wallet-summary.tsx`, on `/home`): current value
+  (cash + holdings at market) with gain % vs money put in, started with, topped up, and an
+  Add money dialog (`POST /portfolio/deposit`). All numbers are computed by the API.
 - **Investing** (`features/portfolio`): the Invest button on a stock page sends logged-out users
   to `/auth/login?redirectTo=/stocks/X?invest=1`; on return the dialog opens automatically.
   Buys are by dollar amount (fractional shares); the API prices the order from its own quote.
@@ -107,7 +110,7 @@ src/
 ├── app/                      # Next.js routes only — thin pages that compose features
 │   ├── page.tsx              #   / landing page (no sidebar)
 │   ├── auth/                 #   /auth/login, /auth/register (auth layout)
-│   ├── api/[...path]/        #   /api/* BFF proxy route to StalkApi
+│   ├── api/[...path]/        #   /api/* BFF proxy route to StockSimulatorApi
 │   └── (main)/               #   route group: shares the sidebar layout, adds nothing to the URL
 │       ├── layout.tsx        #     wraps pages in _components/home-layout (side nav + header)
 │       ├── home/             #     /home
@@ -143,7 +146,7 @@ src/
 ## Commands
 
 ```bash
-yarn dev          # dev server on :3000 (Turbopack); needs StalkApi running at API_URL (.env)
+yarn dev          # dev server on :3000 (Turbopack); needs StockSimulatorApi running at API_URL (.env)
 yarn build
 yarn test         # vitest
 npx tsc --noEmit  # type-check

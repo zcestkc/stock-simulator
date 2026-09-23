@@ -10,7 +10,7 @@ const HomePage = () => {
     <div className="flex h-screen items-center bg-card">
       <div className="mx-auto max-w-7xl px-4 py-12 text-center sm:px-6 lg:px-8 lg:py-16">
         <h2 className="text-3xl tracking-widest text-foreground sm:text-4xl select-none">
-          STALK
+          STOCK SIMULATOR
         </h2>
         <Typewriter text="An investment simulator" delay={100} infinite />
         <Link href={paths.app.home.getHref()}>
@@ -18,7 +18,7 @@ const HomePage = () => {
             src="/logo.svg"
             width={300}
             height={300}
-            alt="Stalk Logo"
+            alt="Stock Simulator logo"
             className="dark:invert"
           />
         </Link>
@@ -30,7 +30,7 @@ const HomePage = () => {
           </div>
           <div className="ml-3 inline-flex">
             <a
-              href="https://github.com/zcestkc/stalk"
+              href="https://github.com/zcestkc/stock-simulator"
               target="_blank"
               rel="noreferrer"
             >

@@ -70,8 +70,8 @@ export function getServerCookies() {
   });
 }
 
-// Browser: same-origin /api, proxied to StalkApi by app/api/[...path]/route.ts (which also
-// refreshes expired access tokens). Server: straight to StalkApi; middleware has already
+// Browser: same-origin /api, proxied to StockSimulatorApi by app/api/[...path]/route.ts (which also
+// refreshes expired access tokens). Server: straight to StockSimulatorApi; middleware has already
 // ensured a fresh access token for page requests.
 function getBaseUrl(): string {
   if (typeof window !== 'undefined') return '/api';

@@ -2,7 +2,7 @@ import { cookiePairs, refreshTokens } from '@/lib/server/api-upstream';
 import { NextResponse, type NextRequest } from 'next/server';
 
 // All pages are public; login is only required for actions on the user's money
-// (enforced by StalkApi, e.g. [Authorize] on PortfolioController).
+// (enforced by StockSimulatorApi, e.g. [Authorize] on PortfolioController).
 // This middleware never blocks a page. It only keeps a logged-in user's session fresh:
 // if the access token has expired, it refreshes before any server component renders.
 export async function middleware(request: NextRequest) {

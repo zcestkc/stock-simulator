@@ -1,9 +1,9 @@
 import { splitCookiesString } from 'set-cookie-parser';
 
-// Server-only helpers for talking to StalkApi. Used by middleware (edge) and the
+// Server-only helpers for talking to StockSimulatorApi. Used by middleware (edge) and the
 // /api proxy route (node), so this must only use web-standard APIs.
 
-/** Base URL of StalkApi, e.g. http://localhost:5030/api. Never exposed to the browser. */
+/** Base URL of StockSimulatorApi, e.g. http://localhost:5030/api. Never exposed to the browser. */
 export const getApiUrl = (): string => {
   const url = process.env.API_URL;
   if (!url) throw new Error('API_URL is not set (see .env)');

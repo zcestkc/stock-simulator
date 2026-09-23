@@ -8,7 +8,7 @@ import { NextRequest } from 'next/server';
 
 /*
  * Backend-for-frontend proxy: the browser only ever calls same-origin /api/*,
- * and this forwards to StalkApi. Keeps the API off the public internet, avoids
+ * and this forwards to StockSimulatorApi. Keeps the API off the public internet, avoids
  * CORS, and handles access-token refresh in one place (retry once on 401).
  */
 
