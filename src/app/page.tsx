@@ -2,13 +2,10 @@ import { Button } from '@/components/ui/button';
 import { Typewriter } from '@/components/ui/header/Typewriter';
 import { Link } from '@/components/ui/link/link';
 import { paths } from '@/config/paths';
-import { checkLoggedIn } from '@/utils/auth';
 import { GitHubLogoIcon, RocketIcon } from '@radix-ui/react-icons';
 import Image from 'next/image';
 
-const HomePage = async () => {
-  const isLoggedIn = await checkLoggedIn();
-
+const HomePage = () => {
   return (
     <div className="flex h-screen items-center bg-card">
       <div className="mx-auto max-w-7xl px-4 py-12 text-center sm:px-6 lg:px-8 lg:py-16">
@@ -16,22 +13,12 @@ const HomePage = async () => {
           STALK
         </h2>
         <Typewriter text="An investment simulator" delay={100} infinite />
-        <Link
-          href={
-            isLoggedIn ? paths.app.root.getHref() : paths.auth.login.getHref()
-          }
-        >
+        <Link href={paths.app.home.getHref()}>
           <Image src="/logo.svg" width={300} height={300} alt="Stalk Logo" />
         </Link>
         <div className="mt-8 flex justify-center">
           <div className="inline-flex rounded-md shadow">
-            <Link
-              href={
-                isLoggedIn
-                  ? paths.app.root.getHref()
-                  : paths.auth.login.getHref()
-              }
-            >
+            <Link href={paths.app.home.getHref()}>
               <Button icon={<RocketIcon />}>Get started</Button>
             </Link>
           </div>
