@@ -1,6 +1,6 @@
 import { api } from '@/lib/api-client';
 import { MutationConfig } from '@/lib/react-query';
-import { TradeResult } from '@/types/api';
+import { TradeResultResponse } from '../model/trade';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { getPortfolioQueryOptions } from './get-portfolio';
 
@@ -9,7 +9,9 @@ export type BuyStockInput = {
   amount: number; // USD to invest; the server sets the price
 };
 
-export const buyStock = (input: BuyStockInput): Promise<TradeResult> => {
+export const buyStock = (
+  input: BuyStockInput,
+): Promise<TradeResultResponse> => {
   return api.post('/portfolio/buy', input);
 };
 

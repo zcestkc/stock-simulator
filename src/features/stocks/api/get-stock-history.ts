@@ -1,6 +1,6 @@
 import { api } from '@/lib/api-client';
 import { QueryConfig } from '@/lib/react-query';
-import { StockHistory, StockRange } from '@/types/api';
+import { StockHistoryResponse, StockRange } from '../model/stock-history';
 import {
   keepPreviousData,
   queryOptions,
@@ -12,7 +12,7 @@ const INTRADAY_RANGES: StockRange[] = ['1d', '5d'];
 export const getStockHistory = (
   symbol: string,
   range: StockRange,
-): Promise<StockHistory> => {
+): Promise<StockHistoryResponse> => {
   return api.get(`/stocks/${encodeURIComponent(symbol)}/history`, {
     params: { range },
   });

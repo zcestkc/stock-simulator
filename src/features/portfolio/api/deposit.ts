@@ -1,6 +1,6 @@
 import { api } from '@/lib/api-client';
 import { MutationConfig } from '@/lib/react-query';
-import { Portfolio } from '@/types/api';
+import { PortfolioResponse } from '../model/portfolio';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { getPortfolioQueryOptions } from './get-portfolio';
 
@@ -8,7 +8,7 @@ export type DepositInput = {
   amount: number; // USD to add to the wallet
 };
 
-export const deposit = (input: DepositInput): Promise<Portfolio> => {
+export const deposit = (input: DepositInput): Promise<PortfolioResponse> => {
   return api.post('/portfolio/deposit', input);
 };
 

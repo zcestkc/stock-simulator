@@ -1,4 +1,5 @@
-import { AuthResponse, User } from '@/types/api';
+import { api, isUnauthorized } from '../api-client';
+import { UserResponse } from './model/user';
 import {
   queryOptions,
   useMutation,
@@ -6,12 +7,11 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { z } from 'zod';
-import { api, isUnauthorized } from './api-client';
 
 // null = not logged in. Pages are public, so that's a normal state, not an error.
-export const getUser = async (): Promise<User | null> => {
+export const getUser = async (): Promise<UserResponse | null> => {
   try {
-    return await api.get<User>('/auth/me');
+    return await api.get<UserResponse>('/auth/me');
   } catch (error) {
     if (isUnauthorized(error)) return null;
     throw error;
@@ -75,7 +75,7 @@ export const loginInputSchema = z.object({
 export type LoginInput = z.infer<typeof loginInputSchema>;
 const loginWithUsernameAndPassword = (
   data: LoginInput,
-): Promise<AuthResponse> => {
+): Promise<UserResponse> => {
   return api.post('/auth/login', data);
 };
 
@@ -105,6 +105,6 @@ export type RegisterInput = z.infer<typeof registerInputSchema>;
 const registerWithUsernameAndPassword = ({
   username,
   password,
-}: RegisterInput): Promise<AuthResponse> => {
+}: RegisterInput): Promise<UserResponse> => {
   return api.post('/auth/register', { username, password });
 };

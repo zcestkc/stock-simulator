@@ -2,7 +2,8 @@
 
 import { Spinner } from '@/components/ui/spinner/spinner';
 import { paths } from '@/config/paths';
-import { STOCK_RANGES, StockQuote, StockRange } from '@/types/api';
+import { STOCK_RANGES, StockRange } from '../model/stock-history';
+import { StockQuoteResponse } from '../model/stock-quote';
 import { cn } from '@/utils/cn';
 import { formatCurrency, formatSigned } from '@/utils/format';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
@@ -31,7 +32,7 @@ const directionClass = (value: number) =>
 type StockViewProps = {
   symbol: string;
   // Slot for actions next to the price (e.g. Invest), given the live quote.
-  actions?: (stock: StockQuote) => ReactNode;
+  actions?: (stock: StockQuoteResponse) => ReactNode;
 };
 
 export const StockView = ({ symbol, actions }: StockViewProps) => {

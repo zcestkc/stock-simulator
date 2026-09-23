@@ -72,8 +72,13 @@ Tailwind CSS 3, TanStack Query 5. Early stage.
   route-level layout (the app shell, auth layout). Real UI with its own data/loading/empty states
   belongs in `features/<name>/components/` (e.g. the profile lives in `features/auth`). Lint can't
   catch this one (the import direction is legal), so check it in review.
+- **Types live with their feature**, in `features/<name>/model/` (one file per area, e.g.
+  `stocks/model/stock-quote.ts`), never in a global types file. Types describing API JSON are named
+  `…Response` (`StockQuoteResponse`, `PortfolioResponse`, nested ones too: `HoldingResponse`) and
+  mirror the API DTO they're commented with. Shared code keeps its types alongside it (e.g. the
+  logged-in user is `UserResponse` in `lib/auth/model/user.ts`, because `lib/` can't import features).
 - Features don't import from other features. Shared code goes in `components/`, `lib/`,
-  `utils/`, `types/`.
+  `utils/`; `types/` only holds ambient declarations (`css.d.ts`).
 
 ## System design
 
@@ -138,23 +143,25 @@ src/
 │       └── profile/          #     /profile (renders features/auth UserProfile)
 ├── features/<name>/          # one folder per domain feature
 │   ├── api/                  #   fetchers + queryOptions + useX hooks (one file per endpoint)
+│   ├── model/                #   the feature's types: API shapes (`…Response`) + constants
 │   └── components/           #   feature UI
 ├── components/               # shared, feature-agnostic UI
 │   ├── ui/                   #   primitives (button, drawer, dropdown, form, spinner, …)
 │   ├── layouts/              #   ContentLayout (page title + container)
 │   └── errors/
-├── lib/                      # app infrastructure: api-client, auth hooks, react-query config
+├── lib/                      # app infrastructure: api-client, react-query config
+│   ├── auth/                 #   useUser/useLogin/useRegister/useLogout (index.ts) + model/user.ts
 │   └── server/               #   server-only: api-upstream (API_URL, refreshTokens, cookie helpers)
-├── config/                   # env (zod-validated), paths (all route hrefs — use these, don't hard-code URLs)
-├── types/api.ts              # API response types (mirror the API's DTOs)
-├── utils/                    # small helpers: cn, css-tokens, eod
+├── config/                   # paths (all route hrefs — use these, don't hard-code URLs)
+├── types/css.d.ts            # ambient declarations only (API types live in features/*/model)
+├── utils/                    # small helpers: cn, css-tokens, format
 ├── styles/globals.css        # Tailwind layers + design tokens
 └── middleware.ts             # silent token refresh (never blocks a page)
 ```
 
 ### Adding a feature (pattern to copy: `features/stocks`)
 
-1. Types in `types/api.ts`, matching the API DTO.
+1. Types in `features/<name>/model/`, named `…Response`, matching the API DTO.
 2. `features/<name>/api/get-<thing>.ts`: fetcher via `api.get('/path')`, a
    `get<Thing>QueryOptions()` and a `use<Thing>()` hook.
 3. Components in `features/<name>/components/` (`'use client'` if they use hooks).

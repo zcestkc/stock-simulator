@@ -1,6 +1,6 @@
 'use client';
 
-import { StockCandle } from '@/types/api';
+import { StockCandleResponse } from '../model/stock-history';
 import { useTheme } from 'next-themes';
 import { tokenColor } from '@/utils/css-tokens';
 import {
@@ -16,7 +16,7 @@ import { useEffect, useRef } from 'react';
 export type ChartType = 'candles' | 'line';
 
 type StockChartProps = {
-  candles: StockCandle[];
+  candles: StockCandleResponse[];
   gmtOffset: number;
   intraday: boolean;
   type: ChartType;
