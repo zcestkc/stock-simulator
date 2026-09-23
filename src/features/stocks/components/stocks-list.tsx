@@ -62,7 +62,7 @@ export const StocksList = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search by symbol or name"
-          className="h-9 w-full max-w-xs rounded-md border border-input bg-card px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          className="h-9 w-full max-w-xs rounded-md border border-input bg-card px-3 py-1 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-hidden"
         />
         {updatedAt && (
           <span className="text-xs text-muted-foreground">
@@ -73,7 +73,7 @@ export const StocksList = () => {
 
       <div className="overflow-x-auto rounded-lg border bg-card">
         <table className="min-w-full text-sm">
-          <thead className="bg-muted text-left text-xs uppercase tracking-wide text-muted-foreground">
+          <thead className="bg-muted text-left text-xs tracking-wide text-muted-foreground uppercase">
             <tr>
               <th className="px-4 py-3">Symbol</th>
               <th className="px-4 py-3">Name</th>
@@ -132,12 +132,12 @@ export const StocksList = () => {
                   >
                     {formatSigned(stock.changePercent, '%')}
                   </td>
-                  <td className="hidden px-4 py-3 text-right tabular-nums text-muted-foreground md:table-cell">
+                  <td className="hidden px-4 py-3 text-right text-muted-foreground tabular-nums md:table-cell">
                     {stock.dayLow != null && stock.dayHigh != null
                       ? `${stock.dayLow.toFixed(2)} – ${stock.dayHigh.toFixed(2)}`
                       : '—'}
                   </td>
-                  <td className="hidden px-4 py-3 text-right tabular-nums text-muted-foreground md:table-cell">
+                  <td className="hidden px-4 py-3 text-right text-muted-foreground tabular-nums md:table-cell">
                     {formatVolume(stock.volume)}
                   </td>
                 </tr>

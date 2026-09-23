@@ -26,7 +26,7 @@ export const UserProfile = () => {
 
   if (!user.data) {
     return (
-      <div className="space-y-4 rounded-lg bg-card p-6 shadow">
+      <div className="space-y-4 rounded-lg bg-card p-6 shadow-sm">
         <p className="text-muted-foreground">Log in to see your profile.</p>
         <Link href={paths.auth.login.getHref(paths.main.profile.getHref())}>
           <Button>Log in</Button>
@@ -36,10 +36,10 @@ export const UserProfile = () => {
   }
 
   return (
-    <div className="overflow-hidden bg-card shadow sm:rounded-lg">
+    <div className="overflow-hidden bg-card shadow-sm sm:rounded-lg">
       <div className="px-4 py-5 sm:px-6">
         <div className="flex justify-between">
-          <h3 className="text-lg font-medium leading-6 text-foreground">
+          <h3 className="text-lg leading-6 font-medium text-foreground">
             User Information
           </h3>
           {/* <UpdateProfile /> */}

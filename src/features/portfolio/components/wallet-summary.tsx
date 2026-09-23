@@ -76,7 +76,7 @@ export const WalletSummary = () => {
               ({formatSigned(data.gainPercent, '%')})
             </span>
           </p>
-          <p className="text-sm tabular-nums text-muted-foreground">
+          <p className="text-sm text-muted-foreground tabular-nums">
             {formatCurrency(data.cash)} cash ·{' '}
             {formatCurrency(data.investedValue)} invested
           </p>
@@ -162,7 +162,7 @@ const AddMoneyForm = ({ onDone }: { onDone: () => void }) => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="1000.00"
-          className="h-10 rounded-md border border-input bg-card px-3 text-base tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          className="h-10 rounded-md border border-input bg-card px-3 text-base tabular-nums shadow-xs placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-hidden"
         />
       </label>
       {error && <p className="text-sm text-destructive">{error}</p>}

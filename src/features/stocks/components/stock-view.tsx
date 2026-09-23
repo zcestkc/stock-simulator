@@ -113,7 +113,7 @@ export const StockView = ({ symbol, actions }: StockViewProps) => {
               key={t}
               onClick={() => setChartType(t)}
               className={cn(
-                'rounded-md px-3 py-1 text-sm font-medium capitalize text-muted-foreground hover:bg-accent',
+                'rounded-md px-3 py-1 text-sm font-medium text-muted-foreground capitalize hover:bg-accent',
                 t === chartType && 'bg-secondary text-secondary-foreground',
               )}
             >
@@ -130,11 +130,11 @@ export const StockView = ({ symbol, actions }: StockViewProps) => {
         )}
       >
         {historyQuery.isLoading ? (
-          <div className="flex h-[300px] items-center justify-center sm:h-[420px]">
+          <div className="flex h-75 items-center justify-center sm:h-105">
             <Spinner size="lg" />
           </div>
         ) : historyQuery.isError || !history ? (
-          <div className="flex h-[300px] items-center justify-center text-destructive sm:h-[420px]">
+          <div className="flex h-75 items-center justify-center text-destructive sm:h-105">
             Couldn&apos;t load chart data.
           </div>
         ) : (

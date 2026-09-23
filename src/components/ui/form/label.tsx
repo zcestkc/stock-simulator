@@ -5,7 +5,7 @@ import * as LabelPrimitive from '@radix-ui/react-label';
 import React from 'react';
 
 const labelVariants = cva(
-  'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
+  'text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
 );
 
 type LabelProps = React.ComponentProps<typeof LabelPrimitive.Root> &

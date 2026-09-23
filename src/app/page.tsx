@@ -9,7 +9,7 @@ const HomePage = () => {
   return (
     <div className="flex h-screen items-center bg-card">
       <div className="mx-auto max-w-7xl px-4 py-12 text-center sm:px-6 lg:px-8 lg:py-16">
-        <h2 className="select-none text-3xl tracking-widest text-foreground sm:text-4xl">
+        <h2 className="text-3xl tracking-widest text-foreground select-none sm:text-4xl">
           STOCK SIMULATOR
         </h2>
         <Typewriter text="An investment simulator" delay={100} infinite />
@@ -23,7 +23,7 @@ const HomePage = () => {
           />
         </Link>
         <div className="mt-8 flex justify-center">
-          <div className="inline-flex rounded-md shadow">
+          <div className="inline-flex rounded-md shadow-sm">
             <Link href={paths.main.home.getHref()}>
               <Button icon={<RocketIcon />}>Get started</Button>
             </Link>

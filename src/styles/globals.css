@@ -1,12 +1,91 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@import 'tw-animate-css'; /* animate-in/out, fade-*, zoom-*, slide-* (Radix dialog/dropdown) */
+
+/* `dark:` variant follows the `dark` class next-themes puts on <html> (only for non-colour tweaks). */
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Tokens → Tailwind utilities, scoped by role (see CLAUDE.md): e.g. `bg-card` exists but
+ * `text-card` doesn't. The values live in :root / .dark below.
+ */
+@theme {
+  --background-color-background: hsl(var(--background));
+  --background-color-card: hsl(var(--card));
+  --background-color-popover: hsl(var(--popover));
+  --background-color-primary: hsl(var(--primary));
+  --background-color-secondary: hsl(var(--secondary));
+  --background-color-muted: hsl(var(--muted));
+  --background-color-accent: hsl(var(--accent));
+  --background-color-overlay: hsl(var(--overlay));
+
+  --background-color-sidebar: hsl(var(--sidebar));
+  --background-color-sidebar-accent: hsl(var(--sidebar-accent));
+  --background-color-sidebar-active: hsl(var(--sidebar-active));
+
+  --background-color-positive: hsl(var(--positive));
+  --background-color-negative: hsl(var(--negative));
+  --background-color-destructive: hsl(var(--destructive));
+  --background-color-info: hsl(var(--info));
+  --background-color-warning: hsl(var(--warning));
+
+  --ring-offset-color-background: hsl(var(--background));
+  --ring-offset-color-card: hsl(var(--card));
+  --ring-offset-color-popover: hsl(var(--popover));
+  --ring-offset-color-primary: hsl(var(--primary));
+  --ring-offset-color-secondary: hsl(var(--secondary));
+  --ring-offset-color-muted: hsl(var(--muted));
+  --ring-offset-color-accent: hsl(var(--accent));
+  --ring-offset-color-overlay: hsl(var(--overlay));
+
+  --ring-offset-color-sidebar: hsl(var(--sidebar));
+  --ring-offset-color-sidebar-accent: hsl(var(--sidebar-accent));
+  --ring-offset-color-sidebar-active: hsl(var(--sidebar-active));
+
+  --text-color-foreground: hsl(var(--foreground));
+  --text-color-card-foreground: hsl(var(--card-foreground));
+  --text-color-popover-foreground: hsl(var(--popover-foreground));
+  --text-color-primary-foreground: hsl(var(--primary-foreground));
+  --text-color-secondary-foreground: hsl(var(--secondary-foreground));
+  --text-color-muted-foreground: hsl(var(--muted-foreground));
+  --text-color-accent-foreground: hsl(var(--accent-foreground));
+  --text-color-destructive-foreground: hsl(var(--destructive-foreground));
+  --text-color-link: hsl(var(--link));
+
+  --text-color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --text-color-sidebar-muted: hsl(var(--sidebar-muted));
+  --text-color-sidebar-active-foreground: hsl(var(--sidebar-active-foreground));
+
+  --text-color-positive: hsl(var(--positive));
+  --text-color-negative: hsl(var(--negative));
+  --text-color-destructive: hsl(var(--destructive));
+  --text-color-info: hsl(var(--info));
+  --text-color-warning: hsl(var(--warning));
+
+  --border-color-border: hsl(var(--border));
+  --border-color-input: hsl(var(--input));
+  --border-color-ring: hsl(var(--ring));
+  --border-color-positive: hsl(var(--positive));
+  --border-color-negative: hsl(var(--negative));
+  --border-color-destructive: hsl(var(--destructive));
+  --border-color-info: hsl(var(--info));
+  --border-color-warning: hsl(var(--warning));
+
+  --ring-color-border: hsl(var(--border));
+  --ring-color-input: hsl(var(--input));
+  --ring-color-ring: hsl(var(--ring));
+  --ring-color-positive: hsl(var(--positive));
+  --ring-color-negative: hsl(var(--negative));
+  --ring-color-destructive: hsl(var(--destructive));
+  --ring-color-info: hsl(var(--info));
+  --ring-color-warning: hsl(var(--warning));
+}
 
 /*
  * Design tokens. Every colour in the app comes from here — see CLAUDE.md.
- * Values are HSL channels (no hsl() wrapper) so Tailwind can apply opacity,
- * e.g. `bg-primary/90`. Use via Tailwind classes (`text-positive`) or, in JS,
- * via `tokenColor('positive')` from '@/utils/css-tokens'.
+ * Values are HSL channels (no hsl() wrapper): @theme above wraps them, and
+ * `tokenColor('positive', 0.2)` in '@/utils/css-tokens' reads them for JS (canvas charts).
+ * Use via Tailwind classes (`text-positive`, `bg-primary/90`) or tokenColor().
  */
 @layer base {
   :root {
@@ -55,7 +134,7 @@
     color-scheme: light;
   }
 
-  /* Dark theme: same token names, different values. Toggled by src/lib/theme.ts. */
+  /* Dark theme: same token names, different values. Toggled by next-themes (app/provider.tsx). */
   .dark {
     --background: 224 20% 8%;
     --foreground: 210 20% 96%;
@@ -103,6 +182,12 @@
 
   * {
     @apply border-border;
+  }
+
+  /* Tailwind v4 dropped the pointer cursor on buttons; keep v3's behaviour. */
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
   }
 
   body {

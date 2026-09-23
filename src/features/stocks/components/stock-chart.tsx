@@ -124,7 +124,7 @@ export const StockChart = ({
   // The chart is absolutely positioned so its canvas width doesn't hold the layout open;
   // otherwise the parent can't shrink and autoSize never sees a smaller width.
   return (
-    <div className="relative h-[300px] w-full sm:h-[420px]">
+    <div className="relative h-75 w-full sm:h-105">
       <div ref={containerRef} className="absolute inset-0" />
     </div>
   );

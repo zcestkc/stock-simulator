@@ -158,7 +158,7 @@ const InvestForm = ({ symbol, price, cash, onDone }: InvestFormProps) => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="100.00"
-          className="h-10 rounded-md border border-input bg-card px-3 text-base tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          className="h-10 rounded-md border border-input bg-card px-3 text-base tabular-nums shadow-xs placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-hidden"
         />
       </label>
 

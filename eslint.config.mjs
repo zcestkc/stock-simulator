@@ -46,7 +46,7 @@ export default tseslint.config(
   jsxA11y.flatConfigs.recommended,
   importPlugin.flatConfigs.recommended,
   importPlugin.flatConfigs.typescript,
-  ...tailwind.configs['flat/recommended'],
+  tailwind.configs.recommended,
   {
     plugins: { '@next/next': nextPlugin },
     rules: {
@@ -63,7 +63,8 @@ export default tseslint.config(
     settings: {
       react: { version: 'detect' },
       'import/resolver': { typescript: true, node: true },
-      tailwindcss: { config: 'tailwind.config.ts', callees: ['cn', 'cva'] },
+      // Tailwind v4: config lives in CSS. cn/cva are checked by default.
+      tailwindcss: { cssConfigPath: 'src/styles/globals.css' },
     },
     rules: {
       '@next/next/no-img-element': 'off',
