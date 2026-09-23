@@ -19,7 +19,7 @@ const HomePage = () => {
             width={300}
             height={300}
             alt="Stock Simulator logo"
-            className="dark:invert"
+            className="mx-auto dark:invert"
           />
         </Link>
         <div className="mt-8 flex justify-center">
