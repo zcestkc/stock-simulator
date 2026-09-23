@@ -3,7 +3,7 @@
 import { Spinner } from '@/components/ui/spinner/spinner';
 import { paths } from '@/lib/paths';
 import { cn } from '@/utils/cn';
-import { formatCurrency, formatSigned } from '@/utils/format';
+import { formatCurrency, formatMarketTime, formatSigned } from '@/utils/format';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -66,7 +66,7 @@ export const StocksList = () => {
         />
         {updatedAt && (
           <span className="text-xs text-muted-foreground">
-            Last trade {new Date(updatedAt).toLocaleString()}
+            Last trade {formatMarketTime(updatedAt)}
           </span>
         )}
       </div>

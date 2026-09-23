@@ -1,14 +1,17 @@
 # Stock Simulator — frontend
 
-Stock & crypto investment simulator. Next.js 15 (App Router) + React 19 + TypeScript,
-Tailwind CSS 3, TanStack Query 5. Early stage.
+Stock investment simulator (crypto coming later). Next.js 16 (App Router, Turbopack) + React 19.3 +
+TypeScript 6, Tailwind CSS 4, TanStack Query 5, Zod 4, Vitest 5. Node 24 (via nvm-windows). Early stage.
+
+Next 16 ships its own docs in `node_modules/next/dist/docs/`; check them before relying on
+older Next knowledge (e.g. `middleware` is now `proxy`, `reactCompiler` is top-level).
 
 ## Rules
 
 - **Colours come from CSS tokens only.** Never hard-code a colour in a component: no hex/rgb
   values, and no Tailwind palette classes like `text-gray-500`, `bg-white`, `text-green-600`.
   - Tokens are defined once in `src/styles/globals.css` (`:root`, HSL channels) and mapped
-    to Tailwind in `tailwind.config.ts`.
+    to Tailwind utilities in the same file's `@theme` block (Tailwind 4 has no JS config).
   - **Tokens are scoped by role.** Each one only exists for the utilities that fit it, so a
     wrong pairing (`text-card`, `bg-muted-foreground`) generates no CSS:
 
@@ -26,7 +29,7 @@ Tailwind CSS 3, TanStack Query 5. Early stage.
     `tokenColor('positive', 0.2)` from `src/utils/css-tokens.ts`. Any token works here.
   - Need a new colour? Add a semantic token (named for its role, e.g. `--chart-grid`, not
     `--light-grey`) in `globals.css`, then register it under the right role in
-    `tailwind.config.ts` (skip that for JS-only tokens).
+    `@theme` in `globals.css` (skip that for JS-only tokens).
   - Price direction is always `positive` (up) / `negative` (down); errors are `destructive`.
   - **Dark mode** is the same tokens with different values under `.dark` in `globals.css`.
     A new token needs a value in both `:root` and `.dark`. Don't use `dark:` colour classes;
@@ -48,13 +51,14 @@ Tailwind CSS 3, TanStack Query 5. Early stage.
   which only allow same-site paths (open-redirect protection, unit-tested). Post-login navigation
   happens in one place: `useRedirectIfLoggedIn()` on the login/register pages.
 - **Token refresh lives in one function**, `refreshTokens()` in `lib/server/api-upstream.ts`,
-  used by both the `/api` proxy and middleware. Don't add refresh logic anywhere else.
+  used by both the `/api` proxy route and `proxy.ts`. Don't add refresh logic anywhere else.
 - **URLs come from `lib/paths.ts`** (`paths.main.stocks.getHref()`), never hard-coded strings.
   `paths.landing` is `/`; `paths.main.*` are the sidebar pages; `paths.auth.*` take a `redirectTo`.
   Sidebar pages live in the `app/(main)/` route group.
-- New Tailwind class locations must be covered by `content` in `tailwind.config.ts`, or the
-  classes silently won't be generated.
-- **React Compiler is on** (`experimental.reactCompiler` in `next.config.ts`,
+- **Rendered text must not depend on locale or timezone** (`toLocaleString()`, `new Date()`
+  formatting without options): the server and browser differ, which breaks hydration. Use the
+  helpers in `utils/format.ts` (fixed `en-US`; market times in `America/New_York`, shown as ET).
+- **React Compiler is on** (`reactCompiler: true` in `next.config.ts`,
   `babel-plugin-react-compiler`). It memoises components, hooks and derived values at build time,
   so don't add `useMemo`, `useCallback` or `React.memo` by hand. Write plain code; it only works
   if components follow the [Rules of React](https://react.dev/reference/rules) (pure render, no
@@ -64,7 +68,8 @@ Tailwind CSS 3, TanStack Query 5. Early stage.
   **Known incompatibility:** `react-hook-form` (its `form`/`formState` keep the same identity while
   changing), so `components/ui/form/form.tsx` opts out with `'use no memo'`; without it,
   validation errors never render. Vitest also compiles with the React Compiler
-  (`vitest.config.ts`) so tests catch this; `login-form.test.tsx` has a regression test.
+  (`vitest.config.ts`, via `@rolldown/plugin-babel` + `reactCompilerPreset`) so tests catch this;
+  `login-form.test.tsx` has a regression test.
 - **React 19: no `forwardRef`.** `ref` is a regular prop. Type props with
   `React.ComponentProps<'button'>` / `React.ComponentProps<typeof Primitive.Root>` (these include
   `ref`) and spread them onto the element. Don't set `displayName` on named components, and avoid
@@ -87,7 +92,7 @@ Tailwind CSS 3, TanStack Query 5. Early stage.
                 ┌──────────── Next.js (stock-simulator, :3000) ────────────┐
 Browser ──────► │ pages (SSR)          ───┐                         │
   same-origin   │ /api/* proxy route   ───┼──► StockSimulatorApi (.NET 9, :5030/api) ──► Postgres (Docker, :5432)
-  only          │ middleware (refresh) ───┘          │              │
+  only          │ proxy.ts (refresh)   ───┘          │              │
                 └───────────────────────────────────┼──────────────┘
                                                      └──► Yahoo Finance (market data, cached)
 ```
@@ -106,7 +111,7 @@ needs no CORS and its URL is server-only (`API_URL` in `.env`).
   tokens once and retries (not for `auth/login|register|logout|refresh-token`). If StockSimulatorApi
   is unreachable it returns 502.
 - **Auth**: JWT in httpOnly cookies (`accessToken` 5 min, `refreshToken` 30 days) set by the
-  API and passed through the proxy. Pages never require login. `src/middleware.ts` only keeps a
+  API and passed through the proxy. Pages never require login. `src/proxy.ts` (Next 16's name for middleware) only keeps a
   session fresh: if there's a refresh token but no access token, it refreshes and writes the new
   cookies onto the *request* as well as the response (so server components rendering that same
   request see them); if refresh fails it clears the cookie and the visitor continues logged out.
@@ -157,7 +162,7 @@ src/
 ├── types/css.d.ts            # ambient declarations only (API types live in features/*/model)
 ├── utils/                    # small helpers: cn, css-tokens, format
 ├── styles/globals.css        # Tailwind layers + design tokens
-└── middleware.ts             # silent token refresh (never blocks a page)
+└── proxy.ts                  # (was middleware.ts) silent token refresh, never blocks a page
 ```
 
 ### Adding a feature (pattern to copy: `features/stocks`)
@@ -186,5 +191,8 @@ out with CRLF on Windows), the Rules of Hooks + React Compiler rules (`eslint-pl
 `recommended-latest`, `exhaustive-deps` as an error),
 Next.js, a11y, Tailwind class checks, kebab-case file/folder names, and import boundaries
 (features can't import each other; shared code can't import features/app). Import sorting is left
-to the editor (`source.sortImports`), so `import/order` is off. The `typescript-eslint` packages are
-pinned to 8.20 because newer ones need Node ≥ 22.13.
+to the editor (`source.sortImports`), so `import/order` is off. **Version holds** (everything else is on
+latest): ESLint stays on 9 (`eslint-plugin-react`, `-import`, `-jsx-a11y` don't support 10 yet);
+TypeScript stays on 6.0 (typescript-eslint supports `< 6.1`, not TS 7); `@types/node` tracks Node 24.
+`resolutions` in `package.json` keeps every `@typescript-eslint/*` copy on one version (plugins nest
+their own).

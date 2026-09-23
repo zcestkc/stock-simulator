@@ -29,6 +29,14 @@ export const AppProvider = ({ children }: AppProviderProps) => {
         defaultTheme="system"
         enableSystem
         disableTransitionOnChange
+        // React 19.2+ warns when a client component renders <script>. next-themes' theme
+        // script only needs to run from the server HTML, so mark it inert on the client
+        // (its suppressHydrationWarning covers the differing attribute).
+        scriptProps={
+          typeof window === 'undefined'
+            ? undefined
+            : { type: 'application/json' }
+        }
       >
         <QueryClientProvider client={queryClient}>
           {process.env.NEXT_PUBLIC_DEV && <ReactQueryDevtools />}
