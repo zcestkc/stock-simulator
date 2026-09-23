@@ -1,6 +1,6 @@
 'use client';
 
-import { paths } from '@/config/paths';
+import { paths } from '@/lib/paths';
 import { useUser } from '@/lib/auth';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
@@ -17,7 +17,7 @@ export const useRedirectParam = () =>
 export const useRedirectIfLoggedIn = () => {
   const user = useUser();
   const router = useRouter();
-  const target = useRedirectParam() ?? paths.app.home.getHref();
+  const target = useRedirectParam() ?? paths.main.home.getHref();
 
   useEffect(() => {
     if (user.data) router.replace(target);

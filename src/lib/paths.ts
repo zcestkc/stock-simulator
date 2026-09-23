@@ -1,5 +1,5 @@
 export const paths = {
-  home: {
+  landing: {
     getHref: () => '/',
   },
 
@@ -14,10 +14,8 @@ export const paths = {
     },
   },
 
-  app: {
-    root: {
-      getHref: () => '/home',
-    },
+  // Pages in the app/(main) route group (sidebar layout).
+  main: {
     home: {
       getHref: () => '/home',
     },
@@ -27,12 +25,8 @@ export const paths = {
     cryptos: {
       getHref: () => '/cryptos',
     },
-    users: {
-      getHref: () => '/users',
-    },
     profile: {
       getHref: () => '/profile',
     },
   },
-  public: {},
 } as const;

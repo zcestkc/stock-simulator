@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown/dropdown';
 import { ThemeToggle } from '@/components/ui/theme-toggle/theme-toggle';
-import { paths } from '@/config/paths';
+import { paths } from '@/lib/paths';
 import { useLogout, useUser } from '@/lib/auth';
 import { cn } from '@/utils/cn';
 import {
@@ -43,17 +43,17 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const user = useUser();
   const logout = useLogout({
-    onSuccess: () => router.push(paths.home.getHref()),
+    onSuccess: () => router.push(paths.landing.getHref()),
   });
   const navigation = [
-    { name: 'Home', to: paths.app.root.getHref(), icon: Home },
-    { name: 'Stocks', to: paths.app.stocks.getHref(), icon: TrendingUp },
+    { name: 'Home', to: paths.main.home.getHref(), icon: Home },
+    { name: 'Stocks', to: paths.main.stocks.getHref(), icon: TrendingUp },
     {
       name: 'Cryptos',
-      to: paths.app.cryptos.getHref(),
+      to: paths.main.cryptos.getHref(),
       icon: Bitcoin,
     },
-    { name: 'Account', to: paths.app.profile.getHref(), icon: Users },
+    { name: 'Account', to: paths.main.profile.getHref(), icon: Users },
   ].filter(Boolean) as SideNavigationItem[];
 
   return (
@@ -142,7 +142,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem
-                    onClick={() => router.push(paths.app.profile.getHref())}
+                    onClick={() => router.push(paths.main.profile.getHref())}
                     className={cn(
                       'block px-4 py-2 text-sm text-popover-foreground',
                     )}

@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog/dialog';
 import { useNotifications } from '@/components/ui/notifications';
-import { paths } from '@/config/paths';
+import { paths } from '@/lib/paths';
 import { isUnauthorized } from '@/lib/api-client';
 import { useUser } from '@/lib/auth';
 import { formatCurrency, formatShares } from '@/utils/format';

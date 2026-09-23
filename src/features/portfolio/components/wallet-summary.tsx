@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dialog/dialog';
 import { useNotifications } from '@/components/ui/notifications';
 import { Spinner } from '@/components/ui/spinner/spinner';
-import { paths } from '@/config/paths';
+import { paths } from '@/lib/paths';
 import { useUser } from '@/lib/auth';
 import { cn } from '@/utils/cn';
 import { formatCurrency, formatSigned } from '@/utils/format';
@@ -44,7 +44,7 @@ export const WalletSummary = () => {
         <p className="text-muted-foreground">
           Log in to get a wallet of virtual money to invest.
         </p>
-        <Link href={paths.auth.login.getHref(paths.app.home.getHref())}>
+        <Link href={paths.auth.login.getHref(paths.main.home.getHref())}>
           <Button>Log in</Button>
         </Link>
       </div>

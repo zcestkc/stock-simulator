@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner/spinner';
-import { paths } from '@/config/paths';
+import { paths } from '@/lib/paths';
 import { useUser } from '@/lib/auth';
 import Link from 'next/link';
 
@@ -28,7 +28,7 @@ export const UserProfile = () => {
     return (
       <div className="space-y-4 rounded-lg bg-card p-6 shadow">
         <p className="text-muted-foreground">Log in to see your profile.</p>
-        <Link href={paths.auth.login.getHref(paths.app.profile.getHref())}>
+        <Link href={paths.auth.login.getHref(paths.main.profile.getHref())}>
           <Button>Log in</Button>
         </Link>
       </div>

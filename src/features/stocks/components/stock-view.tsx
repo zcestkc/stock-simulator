@@ -1,7 +1,7 @@
 'use client';
 
 import { Spinner } from '@/components/ui/spinner/spinner';
-import { paths } from '@/config/paths';
+import { paths } from '@/lib/paths';
 import { STOCK_RANGES, StockRange } from '../model/stock-history';
 import { StockQuoteResponse } from '../model/stock-quote';
 import { cn } from '@/utils/cn';
@@ -57,7 +57,7 @@ export const StockView = ({ symbol, actions }: StockViewProps) => {
   return (
     <div className="space-y-4">
       <Link
-        href={paths.app.stocks.getHref()}
+        href={paths.main.stocks.getHref()}
         className="flex items-center gap-2 text-muted-foreground"
       >
         <ArrowLeftIcon /> Back to stocks

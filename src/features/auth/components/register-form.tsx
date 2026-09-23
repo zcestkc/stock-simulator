@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form/form';
 import { Input } from '@/components/ui/form/input';
-import { paths } from '@/config/paths';
+import { paths } from '@/lib/paths';
 import { registerInputSchema, useRegister } from '@/lib/auth';
 import NextLink from 'next/link';
 import { useRedirectParam } from '../hooks/use-redirect-if-logged-in';

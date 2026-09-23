@@ -1,7 +1,7 @@
 'use client';
 
 import { Spinner } from '@/components/ui/spinner/spinner';
-import { paths } from '@/config/paths';
+import { paths } from '@/lib/paths';
 import { cn } from '@/utils/cn';
 import { formatCurrency, formatSigned } from '@/utils/format';
 import Link from 'next/link';
@@ -18,7 +18,7 @@ const formatVolume = (value: number | null) =>
       }).format(value);
 
 const stockHref = (symbol: string) =>
-  `${paths.app.stocks.getHref()}/${encodeURIComponent(symbol)}`;
+  `${paths.main.stocks.getHref()}/${encodeURIComponent(symbol)}`;
 
 export const StocksList = () => {
   const router = useRouter();

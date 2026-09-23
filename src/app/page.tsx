@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Typewriter } from '@/components/ui/header/typewriter';
 import { Link } from '@/components/ui/link/link';
-import { paths } from '@/config/paths';
+import { paths } from '@/lib/paths';
 import { GitHubLogoIcon, RocketIcon } from '@radix-ui/react-icons';
 import Image from 'next/image';
 
@@ -13,7 +13,7 @@ const HomePage = () => {
           STOCK SIMULATOR
         </h2>
         <Typewriter text="An investment simulator" delay={100} infinite />
-        <Link href={paths.app.home.getHref()}>
+        <Link href={paths.main.home.getHref()}>
           <Image
             src="/logo.svg"
             width={300}
@@ -24,7 +24,7 @@ const HomePage = () => {
         </Link>
         <div className="mt-8 flex justify-center">
           <div className="inline-flex rounded-md shadow">
-            <Link href={paths.app.home.getHref()}>
+            <Link href={paths.main.home.getHref()}>
               <Button icon={<RocketIcon />}>Get started</Button>
             </Link>
           </div>
