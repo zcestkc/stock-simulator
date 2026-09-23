@@ -117,11 +117,11 @@ export const StockView = ({ symbol }: { symbol: string }) => {
         )}
       >
         {historyQuery.isLoading ? (
-          <div className="flex h-[420px] items-center justify-center">
+          <div className="flex h-[300px] items-center sm:h-[420px] justify-center">
             <Spinner size="lg" />
           </div>
         ) : historyQuery.isError || !history ? (
-          <div className="flex h-[420px] items-center justify-center text-red-600">
+          <div className="flex h-[300px] items-center sm:h-[420px] justify-center text-red-600">
             Couldn&apos;t load chart data.
           </div>
         ) : (

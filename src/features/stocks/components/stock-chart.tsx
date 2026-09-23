@@ -53,6 +53,9 @@ export const StockChart = ({
         borderVisible: false,
         timeVisible: intraday,
         secondsVisible: false,
+        fixLeftEdge: true,
+        fixRightEdge: true,
+        lockVisibleTimeRangeOnResize: true,
       },
     });
 
@@ -114,5 +117,11 @@ export const StockChart = ({
     return () => chart.remove();
   }, [candles, gmtOffset, intraday, type, rising]);
 
-  return <div ref={containerRef} className="h-[420px] w-full" />;
+  // The chart is absolutely positioned so its canvas width doesn't hold the layout open;
+  // otherwise the parent can't shrink and autoSize never sees a smaller width.
+  return (
+    <div className="relative h-[300px] w-full sm:h-[420px]">
+      <div ref={containerRef} className="absolute inset-0" />
+    </div>
+  );
 };
